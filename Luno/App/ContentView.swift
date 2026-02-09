@@ -10,10 +10,12 @@ struct ContentView: View {
     // MARK: - Properties
 
     @Environment(AppState.self) private var appState
-    @Environment(\.modelContext) private var modelContext
 
-    /// Note repository created from model context
-    @State private var noteRepository: NoteRepository?
+    /// Note repository injected from LunoApp
+    let noteRepository: any NoteRepositoryProtocol
+
+    /// Categorization service injected from LunoApp
+    let categorizationService: any CategorizationOrchestratorProtocol
 
     // MARK: - Body
 
@@ -21,19 +23,19 @@ struct ContentView: View {
         @Bindable var appState = appState
 
         TabView(selection: $appState.selectedTab) {
-            captureTab
+            CaptureView(noteRepository: noteRepository, categorizationService: categorizationService, appState: appState)
                 .tabItem {
                     Label(AppTab.capture.title, systemImage: AppTab.capture.iconName)
                 }
                 .tag(AppTab.capture)
 
-            notesTab
+            NotesView(noteRepository: noteRepository)
                 .tabItem {
                     Label(AppTab.notes.title, systemImage: AppTab.notes.iconName)
                 }
                 .tag(AppTab.notes)
 
-            foldersTab
+            FoldersView(noteRepository: noteRepository)
                 .tabItem {
                     Label(AppTab.folders.title, systemImage: AppTab.folders.iconName)
                 }
@@ -51,53 +53,12 @@ struct ContentView: View {
         } message: { error in
             Text(error.localizedDescription)
         }
-        .task {
-            if noteRepository == nil {
-                noteRepository = NoteRepository(modelContainer: modelContext.container)
-            }
-        }
-    }
-
-    // MARK: - Tabs
-
-    @ViewBuilder
-    private var captureTab: some View {
-        if let repository = noteRepository {
-            CaptureView(noteRepository: repository)
-        } else {
-            loadingView
-        }
-    }
-
-    @ViewBuilder
-    private var notesTab: some View {
-        if let repository = noteRepository {
-            NotesView(noteRepository: repository)
-        } else {
-            loadingView
-        }
-    }
-
-    @ViewBuilder
-    private var foldersTab: some View {
-        if let repository = noteRepository {
-            FoldersView(noteRepository: repository)
-        } else {
-            loadingView
-        }
-    }
-
-    private var loadingView: some View {
-        ProgressView()
-            .tint(LunoColors.primary)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(LunoColors.background)
     }
 }
 
 // MARK: - Preview
 
 #Preview {
-    ContentView()
+    ContentView(noteRepository: MockNoteRepository(), categorizationService: MockCategorizationOrchestrator())
         .environment(AppState())
 }

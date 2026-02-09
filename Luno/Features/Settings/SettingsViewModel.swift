@@ -99,14 +99,28 @@ final class SettingsViewModel {
 
     // MARK: - Persistence
 
-    // Note: For production, migrate API key to Keychain for secure storage.
-    // Using UserDefaults for development simplicity.
+    // API key loading priority:
+    // 1. UserDefaults (user-configured in Settings)
+    // 2. CLAUDE_API_KEY environment variable (development)
+    // 3. Empty string (not configured)
+    //
+    // Note: For production, migrate to Keychain for secure storage.
 
     private func saveApiKey(_ key: String) {
         UserDefaults.standard.set(key, forKey: Keys.claudeApiKey)
     }
 
     private static func loadApiKey() -> String {
-        UserDefaults.standard.string(forKey: Keys.claudeApiKey) ?? ""
+        // Check UserDefaults first (user override)
+        if let savedKey = UserDefaults.standard.string(forKey: Keys.claudeApiKey), !savedKey.isEmpty {
+            return savedKey
+        }
+
+        // Fall back to environment variable for development
+        if let envKey = ProcessInfo.processInfo.environment["CLAUDE_API_KEY"] {
+            return envKey
+        }
+
+        return ""
     }
 }

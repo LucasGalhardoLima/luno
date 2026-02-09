@@ -13,11 +13,11 @@ struct CategorizationSheet: View {
 
     let note: Note
     let categorizationResult: CategorizedNote?
-    let onAccept: (PARACategory) -> Void
+    let isCategorizing: Bool
+    let onAccept: (PARACategory) async -> Void
     let onSkip: () -> Void
 
     @State private var selectedCategory: PARACategory
-    @State private var isLoading: Bool
     @State private var hasAppeared = false
 
     // MARK: - Initialization
@@ -25,15 +25,16 @@ struct CategorizationSheet: View {
     init(
         note: Note,
         categorizationResult: CategorizedNote?,
-        onAccept: @escaping (PARACategory) -> Void,
+        isCategorizing: Bool,
+        onAccept: @escaping (PARACategory) async -> Void,
         onSkip: @escaping () -> Void
     ) {
         self.note = note
         self.categorizationResult = categorizationResult
+        self.isCategorizing = isCategorizing
         self.onAccept = onAccept
         self.onSkip = onSkip
         _selectedCategory = State(initialValue: categorizationResult?.result.category ?? .uncategorized)
-        _isLoading = State(initialValue: categorizationResult == nil)
     }
 
     // MARK: - Body
@@ -45,14 +46,16 @@ struct CategorizationSheet: View {
                 notePreview
                     .slideUpOnAppear(delay: 0.05)
 
-                if isLoading {
+                if isCategorizing, categorizationResult == nil {
                     loadingView
-                } else if let result = categorizationResult {
-                    // AI suggestion
-                    suggestionView(result: result)
-                        .slideUpOnAppear(delay: 0.1)
+                } else {
+                    // AI suggestion (if available)
+                    if let result = categorizationResult {
+                        suggestionView(result: result)
+                            .slideUpOnAppear(delay: 0.1)
+                    }
 
-                    // Category options
+                    // Category options (always shown when not loading)
                     categoryPicker
                         .slideUpOnAppear(delay: 0.15)
                 }
@@ -77,8 +80,13 @@ struct CategorizationSheet: View {
                 }
             }
         }
-        .presentationDetents([.medium, .large])
+        .presentationDetents([.large])
         .presentationDragIndicator(.visible)
+        .onChange(of: categorizationResult?.result.category) { _, newCategory in
+            if let newCategory {
+                selectedCategory = newCategory
+            }
+        }
     }
 
     // MARK: - Note Preview
@@ -247,8 +255,10 @@ struct CategorizationSheet: View {
 
     private var actionButtons: some View {
         Button {
-            onAccept(selectedCategory)
-            dismiss()
+            Task {
+                await onAccept(selectedCategory)
+                dismiss()
+            }
         } label: {
             Text("Confirm")
                 .font(LunoTheme.Typography.headline)
@@ -279,6 +289,7 @@ struct CategorizationSheet: View {
     CategorizationSheet(
         note: note,
         categorizationResult: result,
+        isCategorizing: false,
         onAccept: { _ in },
         onSkip: {}
     )

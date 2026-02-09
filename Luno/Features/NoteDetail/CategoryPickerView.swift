@@ -71,6 +71,8 @@ struct CategoryPickerView: View {
             }
             .contentShape(Rectangle())
         }
+        .accessibilityLabel("\(category.displayName): \(category.description)")
+        .accessibilityAddTraits(category == currentCategory ? .isSelected : [])
     }
 }
 

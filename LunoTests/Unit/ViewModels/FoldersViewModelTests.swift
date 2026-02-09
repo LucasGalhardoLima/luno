@@ -99,4 +99,62 @@ final class FoldersViewModelTests: XCTestCase {
         // Then
         XCTAssertEqual(sut.totalNoteCount, 3)
     }
+
+    // MARK: - Folder Update After Save Tests
+
+    func test_fetchCounts_updatesAfterNewNoteSaved() async {
+        // Given - empty repository
+        await sut.fetchCounts()
+        XCTAssertEqual(sut.totalNoteCount, 0)
+
+        // When - a new note is saved
+        let note = Note(content: "New project note", category: .uncategorized)
+        try? await mockRepository.save(note)
+        await sut.fetchCounts()
+
+        // Then - counts reflect the new note
+        XCTAssertEqual(sut.totalNoteCount, 1)
+        XCTAssertEqual(sut.noteCount(for: .uncategorized), 1)
+    }
+
+    func test_fetchCounts_updatesAfterCategoryChange() async {
+        // Given - a note saved as uncategorized
+        let note = Note(content: "Meeting notes for Q3 planning", category: .uncategorized)
+        try? await mockRepository.save(note)
+        await sut.fetchCounts()
+        XCTAssertEqual(sut.noteCount(for: .uncategorized), 1)
+        XCTAssertEqual(sut.noteCount(for: .project), 0)
+
+        // When - category is updated (simulating categorization flow)
+        try? await mockRepository.updateCategory(noteId: note.id, category: .project)
+        await sut.fetchCounts()
+
+        // Then - note moved from uncategorized to project
+        XCTAssertEqual(sut.noteCount(for: .uncategorized), 0)
+        XCTAssertEqual(sut.noteCount(for: .project), 1)
+        XCTAssertEqual(sut.totalNoteCount, 1)
+    }
+
+    func test_fetchCounts_updatesAfterMultipleNotesWithDifferentCategories() async {
+        // Given - save multiple notes with different categories
+        let note1 = Note(content: "Project task", category: .uncategorized)
+        let note2 = Note(content: "Weekly review", category: .uncategorized)
+        let note3 = Note(content: "Useful article", category: .uncategorized)
+        try? await mockRepository.save(note1)
+        try? await mockRepository.save(note2)
+        try? await mockRepository.save(note3)
+
+        // When - each note gets categorized differently
+        try? await mockRepository.updateCategory(noteId: note1.id, category: .project)
+        try? await mockRepository.updateCategory(noteId: note2.id, category: .area)
+        try? await mockRepository.updateCategory(noteId: note3.id, category: .resource)
+        await sut.fetchCounts()
+
+        // Then - each folder shows correct count
+        XCTAssertEqual(sut.noteCount(for: .project), 1)
+        XCTAssertEqual(sut.noteCount(for: .area), 1)
+        XCTAssertEqual(sut.noteCount(for: .resource), 1)
+        XCTAssertEqual(sut.noteCount(for: .uncategorized), 0)
+        XCTAssertEqual(sut.totalNoteCount, 3)
+    }
 }

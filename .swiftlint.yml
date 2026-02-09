@@ -4,6 +4,7 @@
 disabled_rules:
   - trailing_whitespace
   - line_length
+  - trailing_comma  # SwiftFormat enforces trailing commas via --enable trailingCommas
 
 opt_in_rules:
   - empty_count
@@ -11,7 +12,6 @@ opt_in_rules:
   - explicit_init
   - first_where
   - force_unwrapping
-  - implicitly_unwrapped_optional
   - modifier_order
   - multiline_parameters
   - operator_usage_whitespace

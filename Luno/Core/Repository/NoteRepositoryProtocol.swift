@@ -18,6 +18,9 @@ protocol NoteRepositoryProtocol: Sendable {
     /// Update an existing note
     func update(_ note: Note) async throws
 
+    /// Update a note's category by ID (actor-safe for SwiftData)
+    func updateCategory(noteId: UUID, category: PARACategory) async throws
+
     /// Delete a note
     func delete(_ note: Note) async throws
 

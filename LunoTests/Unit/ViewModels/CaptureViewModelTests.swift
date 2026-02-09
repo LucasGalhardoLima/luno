@@ -329,6 +329,69 @@ final class CaptureViewModelTests: XCTestCase {
         // Then
         XCTAssertNil(sut.error)
     }
+
+    // MARK: - Categorization Tests
+
+    func test_saveNote_triggersCategorization_whenServiceProvided() async {
+        // Given
+        let mockCategorization = MockCategorizationOrchestrator()
+        let viewModel = CaptureViewModel(
+            speechService: mockSpeechService,
+            noteRepository: mockNoteRepository,
+            categorizationService: mockCategorization
+        )
+        viewModel.transcription = "Finish landing page redesign by Friday"
+
+        // When
+        await viewModel.saveNote()
+
+        // Then
+        XCTAssertEqual(mockCategorization.categorizeCallCount, 1)
+        XCTAssertTrue(viewModel.showCategorizationSheet)
+        XCTAssertNotNil(viewModel.categorizationResult)
+    }
+
+    func test_saveNote_showsCategorizationSheet_withoutService() async {
+        // Given (sut has no categorization service by default)
+        sut.transcription = "Test note"
+
+        // When
+        await sut.saveNote()
+
+        // Then - sheet shown but no categorization result
+        XCTAssertTrue(sut.showCategorizationSheet)
+        XCTAssertNil(sut.categorizationResult)
+    }
+
+    func test_saveNote_setsCategorizationResult_fromService() async throws {
+        // Given
+        let mockCategorization = MockCategorizationOrchestrator()
+        let expectedResult = CategorizedNote(
+            result: CategorizationResult(
+                category: .area,
+                reasoning: "Ongoing responsibility",
+                confidence: 0.95
+            ),
+            source: .cloud,
+            processingTime: 0.5
+        )
+        mockCategorization.mockResult = expectedResult
+
+        let viewModel = CaptureViewModel(
+            speechService: mockSpeechService,
+            noteRepository: mockNoteRepository,
+            categorizationService: mockCategorization
+        )
+        viewModel.transcription = "Weekly health metrics review"
+
+        // When
+        await viewModel.saveNote()
+
+        // Then
+        let result = try XCTUnwrap(viewModel.categorizationResult)
+        XCTAssertEqual(result.result.category, .area)
+        XCTAssertEqual(result.result.confidence, 0.95, accuracy: 0.001)
+    }
 }
 
 // MockNoteRepository is defined in Luno/Shared/Preview/PreviewHelpers.swift

@@ -1,9 +1,15 @@
 ---
 import BaseLayout from '@/components/BaseLayout.astro';
-import LanguageToggle from '@/components/LanguageToggle.astro';
-import { copyPt } from '@/content/copy.pt';
-import { copyEn } from '@/content/copy.en';
+import FoldFinale from '@/components/landing/FoldFinale.astro';
+import FoldHook from '@/components/landing/FoldHook.astro';
+import FoldParaMap from '@/components/landing/FoldParaMap.astro';
+import FoldProofFlow from '@/components/landing/FoldProofFlow.astro';
+import FoldReveal from '@/components/landing/FoldReveal.astro';
+import NarrativeScript from '@/components/landing/NarrativeScript.astro';
+import ThemeToggle from '@/components/landing/ThemeToggle.astro';
 import { siteConfig } from '@/config/site';
+import { copyEn } from '@/content/copy.en';
+import { copyPt } from '@/content/copy.pt';
 
 const locales = {
   'pt-BR': copyPt,
@@ -11,537 +17,55 @@ const locales = {
 };
 
 const socialPreview = '/images/luno-og.png';
+const phaseLabels = ['Chaos', 'Signal', 'PARA', 'Proof', 'Finale'];
 ---
 
 <BaseLayout pageTitle={copyPt.seo.title} pageDescription={copyPt.seo.description} ogImage={socialPreview}>
-  <div class="relative overflow-hidden">
-    <div class="orbit -left-24 top-10 h-72 w-72" data-parallax="0.008"></div>
-    <div class="orbit right-[-110px] top-[360px] h-80 w-80" data-parallax="0.013"></div>
+  <div class="lunar-stage">
+    <div class="lunar-grain" aria-hidden="true"></div>
+    <div class="lunar-vignette" aria-hidden="true"></div>
 
-    <header class="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-7 md:px-10">
-      <a href="#" class="focus-ring rounded-md text-lg font-semibold tracking-wide text-text0">Luno</a>
-      <div class="flex items-center gap-3">
+    <header class="top-nav">
+      <a href="#hero" class="focus-ring brand-mark">Luno</a>
+      <div class="nav-actions">
+        <ThemeToggle copy={copyPt} />
         <a
           href="#waitlist"
-          class="focus-ring hidden rounded-full border border-brand500/40 bg-brand500/12 px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-brand500 md:inline-flex"
+          class="focus-ring cta cta-nav"
           data-preserve-utm
+          data-track-cta
           data-i18n="nav.cta"
         >
-          Entrar na waitlist
+          {copyPt.nav.cta}
         </a>
-        <p class="text-xs uppercase tracking-[0.16em] text-text1" data-i18n="nav.languageLabel">Idioma</p>
-        <LanguageToggle />
       </div>
     </header>
 
-    <main class="mx-auto w-full max-w-6xl space-y-28 px-6 pb-20 md:px-10">
-      <section class="reveal grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]" id="hero">
-        <div class="space-y-8">
-          <p class="inline-flex rounded-full border border-brand500/35 bg-brand500/8 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-brand500" data-i18n="hero.eyebrow">
-            Luno para iOS
-          </p>
-          <h1 class="font-display text-4xl font-semibold leading-[1.06] text-text0 sm:text-5xl lg:text-6xl" data-i18n="hero.title">
-            Clareza para suas ideias.
-          </h1>
-          <p class="max-w-xl text-base leading-relaxed text-text1 sm:text-lg" data-i18n="hero.subtitle">
-            Capture por voz ou texto. O Luno aplica IA para sugerir a categoria certa no método PARA e você confirma em um toque.
-          </p>
-          <div class="flex flex-col gap-3 sm:flex-row">
-            <a
-              id="hero-cta"
-              href="#waitlist"
-              class="focus-ring inline-flex animate-halo items-center justify-center rounded-full bg-brand600 px-6 py-3 text-sm font-semibold text-white shadow-lunar transition hover:bg-brand500"
-              data-preserve-utm
-              data-i18n="hero.ctaPrimary"
-            >
-              Entrar na waitlist
-            </a>
-            <a
-              href="#how-it-works"
-              class="focus-ring inline-flex items-center justify-center rounded-full border border-moon400/30 bg-bg1/55 px-6 py-3 text-sm font-semibold text-text0 transition hover:border-brand500/55"
-              data-preserve-utm
-              data-i18n="hero.ctaSecondary"
-            >
-              Ver como funciona
-            </a>
-          </div>
-        </div>
+    <aside class="phase-rail" aria-hidden="true">
+      <div class="phase-track"><div id="phase-progress" class="phase-progress"></div></div>
+      <div class="phase-items">
+        {phaseLabels.map((label, index) => (
+          <span class="phase-item" data-phase-item data-phase-label={label} data-phase-index={index}></span>
+        ))}
+      </div>
+    </aside>
 
-        <div class="relative">
-          <div class="absolute -inset-2 rounded-[2rem] bg-gradient-to-br from-brand500/25 via-transparent to-moon400/25 blur-xl"></div>
-          <picture class="relative block overflow-hidden rounded-[2rem] border border-moon400/25 bg-bg1/70 p-2 shadow-card">
-            <img
-              src="/images/luno-capture-dark.png"
-              alt="Tela de captura de voz do app Luno em tema escuro"
-              width="768"
-              height="1344"
-              class="h-auto w-full rounded-[1.4rem]"
-              loading="eager"
-              decoding="async"
-            />
-          </picture>
-        </div>
-      </section>
-
-      <section class="reveal grid gap-6 rounded-3xl border border-white/10 bg-bg1/60 p-8 backdrop-blur md:p-10">
-        <h2 class="font-display text-3xl leading-tight text-text0 sm:text-4xl" data-i18n="problem.title">
-          Ideias rápidas se perdem quando organizar dá trabalho.
-        </h2>
-        <p class="max-w-3xl text-lg leading-relaxed text-text1" data-i18n="problem.body">
-          Capturar é fácil. O atrito está na categorização manual, que quebra o fluxo e leva ao abandono do sistema.
-        </p>
-      </section>
-
-      <section class="reveal grid items-start gap-8 lg:grid-cols-[1.08fr_0.92fr]" id="solution">
-        <div class="space-y-6">
-          <h2 class="font-display text-3xl leading-tight text-text0 sm:text-4xl" data-i18n="solution.title">
-            Luno reduz a fricção entre capturar e organizar.
-          </h2>
-          <ul class="space-y-3 text-base leading-relaxed text-text1">
-            <li class="rounded-2xl border border-white/10 bg-bg1/50 px-4 py-4" data-i18n="solution.bullets.0">Voice-first com alternativa de digitação.</li>
-            <li class="rounded-2xl border border-white/10 bg-bg1/50 px-4 py-4" data-i18n="solution.bullets.1">Sugestão automática em Projects, Areas, Resources ou Archive.</li>
-            <li class="rounded-2xl border border-white/10 bg-bg1/50 px-4 py-4" data-i18n="solution.bullets.2">Confirmação simples em 1 toque, sem fluxo pesado.</li>
-          </ul>
-        </div>
-        <picture class="overflow-hidden rounded-[2rem] border border-moon400/30 bg-bg1/60 shadow-card">
-          <img
-            src="/images/luno-note-card.png"
-            alt="Cartão de nota categorizada automaticamente em Projects"
-            width="1132"
-            height="598"
-            class="h-auto w-full"
-            loading="lazy"
-            decoding="async"
-          />
-        </picture>
-      </section>
-
-      <section class="reveal" id="how-it-works">
-        <h2 class="mb-6 font-display text-3xl text-text0 sm:text-4xl" data-i18n="steps.title">Como funciona</h2>
-        <div class="grid gap-4 md:grid-cols-3">
-          <article class="rounded-3xl border border-white/10 bg-bg1/55 p-6">
-            <h3 class="font-display text-xl text-text0" data-i18n="steps.items.0.title">1. Capturar</h3>
-            <p class="mt-3 text-sm leading-relaxed text-text1" data-i18n="steps.items.0.body">Segure o botão e fale. Ou digite quando preferir discrição.</p>
-          </article>
-          <article class="rounded-3xl border border-white/10 bg-bg1/55 p-6">
-            <h3 class="font-display text-xl text-text0" data-i18n="steps.items.1.title">2. IA organiza</h3>
-            <p class="mt-3 text-sm leading-relaxed text-text1" data-i18n="steps.items.1.body">Luno sugere a categoria PARA com base no contexto da nota.</p>
-          </article>
-          <article class="rounded-3xl border border-white/10 bg-bg1/55 p-6">
-            <h3 class="font-display text-xl text-text0" data-i18n="steps.items.2.title">3. Confirmar</h3>
-            <p class="mt-3 text-sm leading-relaxed text-text1" data-i18n="steps.items.2.body">Aceite ou ajuste. Sua nota entra no fluxo sem burocracia.</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="reveal rounded-3xl border border-moon400/20 bg-gradient-to-br from-brand500/10 via-bg1/70 to-bg1/80 p-8" id="credibility">
-        <h2 class="font-display text-3xl text-text0" data-i18n="credibility.title">Feito para execução real no iPhone</h2>
-        <div class="mt-6 flex flex-wrap gap-3 text-sm text-text0">
-          <span class="rounded-full border border-brand500/45 px-4 py-2" data-i18n="credibility.badges.0">iOS native</span>
-          <span class="rounded-full border border-brand500/45 px-4 py-2" data-i18n="credibility.badges.1">privacy-first</span>
-          <span class="rounded-full border border-brand500/45 px-4 py-2" data-i18n="credibility.badges.2">PARA native</span>
-          <span class="rounded-full border border-brand500/45 px-4 py-2" data-i18n="credibility.badges.3">on-device + cloud fallback</span>
-        </div>
-      </section>
-
-      <section class="reveal rounded-3xl border border-white/10 bg-bg1/60 p-8 md:p-10" id="waitlist">
-        <div class="grid gap-8 lg:grid-cols-[1fr_0.9fr]">
-          <div class="space-y-3">
-            <h2 class="font-display text-3xl text-text0 sm:text-4xl" data-i18n="waitlist.title">Acesso antecipado ao Luno</h2>
-            <p class="max-w-xl text-text1" data-i18n="waitlist.subtitle">Entre na waitlist para testar primeiro e receber novidades do lançamento.</p>
-            <picture class="mt-6 block max-w-sm overflow-hidden rounded-2xl border border-white/10">
-              <img
-                src="/images/luno-capture-light.png"
-                alt="Tela clara de captura do app Luno"
-                width="768"
-                height="1344"
-                class="h-auto w-full"
-                loading="lazy"
-                decoding="async"
-              />
-            </picture>
-          </div>
-
-          <form
-            id="waitlist-form"
-            class="space-y-4 rounded-2xl border border-white/10 bg-bg0/65 p-6"
-            action={siteConfig.waitlistActionUrl}
-            method="post"
-            novalidate
-          >
-            <div>
-              <label for="email" class="mb-2 block text-sm font-medium text-text0" data-i18n="waitlist.emailLabel">Seu melhor e-mail</label>
-              <input
-                id="email"
-                name="email_address"
-                type="email"
-                required
-                autocomplete="email"
-                class="focus-ring w-full rounded-xl border border-brand500/35 bg-bg1/80 px-4 py-3 text-sm text-text0 placeholder:text-text1"
-                placeholder="voce@email.com"
-                data-i18n-placeholder="waitlist.emailPlaceholder"
-              />
-            </div>
-
-            <input type="hidden" name="utm_source" id="utm_source" />
-            <input type="hidden" name="utm_medium" id="utm_medium" />
-            <input type="hidden" name="utm_campaign" id="utm_campaign" />
-            <input type="hidden" name="utm_term" id="utm_term" />
-            <input type="hidden" name="utm_content" id="utm_content" />
-            <input type="hidden" name="gclid" id="gclid" />
-            <input type="hidden" name="fbclid" id="fbclid" />
-            <input type="hidden" name="locale" id="locale" value="pt-BR" />
-
-            <p class="sr-only">
-              <label for="website">Leave this field empty</label>
-              <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
-            </p>
-
-            <button
-              id="waitlist-submit"
-              type="submit"
-              class="focus-ring inline-flex w-full items-center justify-center rounded-full bg-brand600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand500"
-              data-default-label={copyPt.waitlist.submit}
-              data-i18n="waitlist.submit"
-            >
-              Quero acesso antecipado
-            </button>
-
-            <p id="form-feedback" class="min-h-5 text-sm text-text1" aria-live="polite"></p>
-            <p class="text-xs leading-relaxed text-text1">
-              <span data-i18n="waitlist.privacyHint">Ao enviar, você aceita receber e-mails sobre o lançamento.</span>
-              <a href="/privacy" class="focus-ring underline decoration-brand500/70 underline-offset-4" data-preserve-utm data-i18n="footer.privacy">Privacidade</a>.
-            </p>
-          </form>
-        </div>
-      </section>
+    <main class="story-wrap">
+      <FoldHook copy={copyPt} />
+      <FoldReveal copy={copyPt} />
+      <FoldParaMap copy={copyPt} />
+      <FoldProofFlow copy={copyPt} />
+      <FoldFinale copy={copyPt} config={siteConfig} />
     </main>
 
-    <footer class="mx-auto flex w-full max-w-6xl flex-col items-start justify-between gap-4 border-t border-white/10 px-6 py-10 text-sm text-text1 md:flex-row md:items-center md:px-10">
-      <p>© <span id="current-year"></span> Luno. <span data-i18n="footer.rights">Todos os direitos reservados.</span></p>
-      <div class="flex items-center gap-5">
-        <a href="/privacy" class="focus-ring rounded-sm underline decoration-brand500/55 underline-offset-4" data-preserve-utm data-i18n="footer.privacy">Privacidade</a>
-        <a href="mailto:hello@luno.app" class="focus-ring rounded-sm underline decoration-brand500/55 underline-offset-4" data-i18n="footer.contact">Contato</a>
+    <footer class="story-footer">
+      <p>© <span id="current-year"></span> Luno. <span data-i18n="footer.rights">{copyPt.footer.rights}</span></p>
+      <div class="footer-links">
+        <a href="/privacy" class="focus-ring legal-link" data-preserve-utm data-i18n="footer.privacy">{copyPt.footer.privacy}</a>
+        <a href="mailto:hello@luno.app" class="focus-ring legal-link" data-i18n="footer.contact">{copyPt.footer.contact}</a>
       </div>
     </footer>
   </div>
 
-  <script is:inline id="copy-data" type="application/json" set:html={JSON.stringify(locales)}></script>
-  <script is:inline id="site-config" type="application/json" set:html={JSON.stringify(siteConfig)}></script>
-  <script>
-    type Locale = 'pt-BR' | 'en-US';
-    type LandingEventName =
-      | 'landing_view'
-      | 'hero_cta_click'
-      | 'waitlist_submit_start'
-      | 'waitlist_submit_success'
-      | 'waitlist_submit_error'
-      | 'language_switch';
-    type AnalyticsPayload = Record<string, string | number | boolean | null>;
-    type UtmKey =
-      | 'utm_source'
-      | 'utm_medium'
-      | 'utm_campaign'
-      | 'utm_term'
-      | 'utm_content'
-      | 'gclid'
-      | 'fbclid';
-    type UtmMap = Partial<Record<UtmKey, string>>;
-
-    interface SiteConfigClient {
-      defaultLocale: Locale;
-      waitlistProvider: string;
-      analyticsEnabled: boolean;
-    }
-
-    interface CopyClient {
-      seo: {
-        title: string;
-        description: string;
-      };
-      waitlist: {
-        submit: string;
-        pending: string;
-        success: string;
-        error: string;
-      };
-      [key: string]: unknown;
-    }
-
-    function parseJsonScript<T>(id: string): T {
-      const node = document.getElementById(id);
-      if (!(node instanceof HTMLScriptElement) || !node.textContent) {
-        throw new Error(`Missing JSON script: ${id}`);
-      }
-      return JSON.parse(node.textContent) as T;
-    }
-
-    function inferLocale(language: string | undefined, fallback: Locale): Locale {
-      if (!language) {
-        return fallback;
-      }
-      const normalized = language.toLowerCase();
-      if (normalized.startsWith('pt')) return 'pt-BR';
-      if (normalized.startsWith('en')) return 'en-US';
-      return fallback;
-    }
-
-    function readUtmParams(search: URLSearchParams): UtmMap {
-      const keys: UtmKey[] = [
-        'utm_source',
-        'utm_medium',
-        'utm_campaign',
-        'utm_term',
-        'utm_content',
-        'gclid',
-        'fbclid',
-      ];
-      return keys.reduce<UtmMap>((acc, key) => {
-        const value = search.get(key);
-        if (value) acc[key] = value;
-        return acc;
-      }, {});
-    }
-
-    function appendUtmToUrl(href: string, utm: UtmMap): string {
-      try {
-        const url = new URL(href, window.location.origin);
-        Object.entries(utm).forEach(([key, value]) => {
-          if (value && !url.searchParams.has(key)) {
-            url.searchParams.set(key, value);
-          }
-        });
-        if (href.startsWith('http')) return url.toString();
-        return `${url.pathname}${url.search}${url.hash}`;
-      } catch {
-        return href;
-      }
-    }
-
-    function trackEvent(
-      config: SiteConfigClient,
-      eventName: LandingEventName,
-      payload: AnalyticsPayload = {}
-    ): void {
-      if (!config.analyticsEnabled) return;
-      const dataLayer = (
-        window as Window & { dataLayer?: Array<Record<string, unknown>> }
-      ).dataLayer || [];
-      (
-        window as Window & { dataLayer?: Array<Record<string, unknown>> }
-      ).dataLayer = dataLayer;
-      const event = { event: eventName, timestamp: Date.now(), ...payload };
-      dataLayer.push(event);
-      window.dispatchEvent(new CustomEvent('luno:analytics', { detail: event }));
-    }
-
-    function getValueByPath(object: unknown, path: string): string | undefined {
-      const result = path.split('.').reduce<unknown>((acc, part) => {
-        if (acc === null || acc === undefined) return undefined;
-        if (Array.isArray(acc) && !Number.isNaN(Number(part))) {
-          return acc[Number(part)];
-        }
-        if (typeof acc === 'object') {
-          return (acc as Record<string, unknown>)[part];
-        }
-        return undefined;
-      }, object);
-
-      return typeof result === 'string' ? result : undefined;
-    }
-
-    const copyData = parseJsonScript<Record<Locale, CopyClient>>('copy-data');
-    const config = parseJsonScript<SiteConfigClient>('site-config');
-
-    const localeKey = 'luno:landing:locale';
-    const allowedLocales: Locale[] = ['pt-BR', 'en-US'];
-
-    const languageToggleEl = document.getElementById('language-toggle');
-    const heroCta = document.getElementById('hero-cta');
-    const formEl = document.getElementById('waitlist-form');
-    const submitButtonEl = document.getElementById('waitlist-submit');
-    const feedbackEl = document.getElementById('form-feedback');
-    const localeInputEl = document.getElementById('locale');
-
-    if (
-      !(languageToggleEl instanceof HTMLButtonElement) ||
-      !(formEl instanceof HTMLFormElement) ||
-      !(submitButtonEl instanceof HTMLButtonElement) ||
-      !(feedbackEl instanceof HTMLElement) ||
-      !(localeInputEl instanceof HTMLInputElement)
-    ) {
-      throw new Error('Landing elements are missing');
-    }
-    const languageToggle: HTMLButtonElement = languageToggleEl;
-    const form: HTMLFormElement = formEl;
-    const submitButton: HTMLButtonElement = submitButtonEl;
-    const feedback: HTMLElement = feedbackEl;
-    const localeInput: HTMLInputElement = localeInputEl;
-
-    const search = new URLSearchParams(window.location.search);
-    const utm = readUtmParams(search);
-
-    Object.entries(utm).forEach(([key, value]) => {
-      const input = document.getElementById(key);
-      if (input instanceof HTMLInputElement) {
-        input.value = value;
-      }
-    });
-
-    document.querySelectorAll<HTMLAnchorElement>('[data-preserve-utm]').forEach((link) => {
-      const href = link.getAttribute('href');
-      if (!href) return;
-      link.setAttribute('href', appendUtmToUrl(href, utm));
-    });
-
-    function applyLocale(locale: Locale): void {
-      const selectedLocale = allowedLocales.includes(locale) ? locale : config.defaultLocale;
-      const copy = copyData[selectedLocale] || copyData[config.defaultLocale];
-
-      document.documentElement.lang = selectedLocale;
-      localeInput.value = selectedLocale;
-      localStorage.setItem(localeKey, selectedLocale);
-
-      document.querySelectorAll<HTMLElement>('[data-i18n]').forEach((node) => {
-        const key = node.dataset.i18n;
-        if (!key) return;
-        const value = getValueByPath(copy, key);
-        if (value) node.textContent = value;
-      });
-
-      document.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[data-i18n-placeholder]').forEach((node) => {
-        const key = node.dataset.i18nPlaceholder;
-        if (!key) return;
-        const value = getValueByPath(copy, key);
-        if (value) node.setAttribute('placeholder', value);
-      });
-
-      document.title = copy.seo.title;
-      const description = copy.seo.description;
-      document.getElementById('meta-description')?.setAttribute('content', description);
-      document.getElementById('meta-og-title')?.setAttribute('content', copy.seo.title);
-      document.getElementById('meta-og-description')?.setAttribute('content', description);
-      document.getElementById('meta-twitter-title')?.setAttribute('content', copy.seo.title);
-      document.getElementById('meta-twitter-description')?.setAttribute('content', description);
-
-      languageToggle.textContent = selectedLocale === 'pt-BR' ? 'PT' : 'EN';
-      languageToggle.setAttribute(
-        'aria-label',
-        selectedLocale === 'pt-BR' ? 'Switch to English' : 'Mudar para português'
-      );
-
-      submitButton.dataset.defaultLabel = copy.waitlist.submit;
-      submitButton.textContent = copy.waitlist.submit;
-      feedback.textContent = '';
-    }
-
-    const storedLocale = localStorage.getItem(localeKey) as Locale | null;
-    const initialLocale = storedLocale || inferLocale(navigator.language, config.defaultLocale);
-    applyLocale(initialLocale);
-
-    languageToggle.addEventListener('click', () => {
-      const current = (localStorage.getItem(localeKey) as Locale | null) || config.defaultLocale;
-      const next: Locale = current === 'pt-BR' ? 'en-US' : 'pt-BR';
-      applyLocale(next);
-      trackEvent(config, 'language_switch', { locale: next });
-    });
-
-    if (heroCta instanceof HTMLAnchorElement) {
-      heroCta.addEventListener('click', () => {
-        const locale = (localStorage.getItem(localeKey) as Locale | null) || config.defaultLocale;
-        trackEvent(config, 'hero_cta_click', { locale });
-      });
-    }
-
-    form.addEventListener('submit', async (event: SubmitEvent) => {
-      event.preventDefault();
-      const locale = (localStorage.getItem(localeKey) as Locale | null) || config.defaultLocale;
-      const copy = copyData[locale] || copyData[config.defaultLocale];
-
-      const emailInput = form.querySelector('#email');
-      const honeypot = form.querySelector('#website');
-      if (!(emailInput instanceof HTMLInputElement)) return;
-      if (honeypot instanceof HTMLInputElement && honeypot.value) return;
-
-      if (!emailInput.checkValidity()) {
-        feedback.textContent = copy.waitlist.error;
-        trackEvent(config, 'waitlist_submit_error', { locale, reason: 'invalid_email' });
-        return;
-      }
-
-      submitButton.disabled = true;
-      submitButton.textContent = copy.waitlist.pending;
-      feedback.textContent = '';
-      trackEvent(config, 'waitlist_submit_start', { locale, provider: config.waitlistProvider });
-
-      try {
-        const payload = new FormData(form);
-        await fetch(form.action, { method: 'POST', body: payload, mode: 'no-cors' });
-
-        form.reset();
-        localeInput.value = locale;
-        Object.entries(utm).forEach(([key, value]) => {
-          const input = document.getElementById(key);
-          if (input instanceof HTMLInputElement) {
-            input.value = value;
-          }
-        });
-
-        feedback.textContent = copy.waitlist.success;
-        trackEvent(config, 'waitlist_submit_success', { locale, provider: config.waitlistProvider });
-      } catch {
-        feedback.textContent = copy.waitlist.error;
-        trackEvent(config, 'waitlist_submit_error', { locale, reason: 'network' });
-      } finally {
-        submitButton.disabled = false;
-        submitButton.textContent = submitButton.dataset.defaultLabel || copy.waitlist.submit;
-      }
-    });
-
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!reducedMotion) {
-      const reveals = Array.from(document.querySelectorAll<HTMLElement>('.reveal'));
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting && entry.target instanceof HTMLElement) {
-              entry.target.classList.add('is-visible');
-              observer.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.14 }
-      );
-
-      reveals.forEach((node, index) => {
-        node.style.animationDelay = `${index * 80}ms`;
-        observer.observe(node);
-      });
-
-      const parallaxNodes = Array.from(document.querySelectorAll<HTMLElement>('[data-parallax]'));
-      window.addEventListener('pointermove', (event: PointerEvent) => {
-        const centerX = window.innerWidth / 2;
-        const centerY = window.innerHeight / 2;
-        const offsetX = (event.clientX - centerX) / centerX;
-        const offsetY = (event.clientY - centerY) / centerY;
-
-        parallaxNodes.forEach((node) => {
-          const strength = Number(node.dataset.parallax || 0.01);
-          const moveX = offsetX * 28 * strength * 100;
-          const moveY = offsetY * 28 * strength * 100;
-          node.style.transform = `translate3d(${moveX}px, ${moveY}px, 0)`;
-        });
-      });
-    }
-
-    const currentYear = document.getElementById('current-year');
-    if (currentYear) {
-      currentYear.textContent = String(new Date().getFullYear());
-    }
-
-    trackEvent(config, 'landing_view', {
-      locale: (localStorage.getItem(localeKey) as Locale | null) || config.defaultLocale,
-      source: utm.utm_source || 'direct',
-    });
-  </script>
+  <NarrativeScript locales={locales} config={siteConfig} />
 </BaseLayout>

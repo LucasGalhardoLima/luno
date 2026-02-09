@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -116,7 +116,7 @@
 		50E88E6193EC4D36BF5FC84C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		5250FB278091F0094D89EAF7 /* CategorizationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorizationServiceTests.swift; sourceTree = "<group>"; };
 		52DDE615BE353B0D5F0DE1B3 /* PARACategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PARACategory.swift; sourceTree = "<group>"; };
-		5C44BE41CA7F41BBD47D162D /* Luno.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Luno.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5C44BE41CA7F41BBD47D162D /* Luno.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Luno.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5FD17DAFE387A55D86095921 /* NotesNavigationUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesNavigationUITests.swift; sourceTree = "<group>"; };
 		6858BF7504349A62181A8243 /* RecategorizationUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecategorizationUITests.swift; sourceTree = "<group>"; };
 		73820B827A033EAE7378AD14 /* LunoColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LunoColors.swift; sourceTree = "<group>"; };
@@ -594,7 +594,6 @@
 				2368E924D0D5E0168930F9B6 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
 				E4DD5015D3152C4D20E14669 /* XCRemoteSwiftPackageReference "SwiftAnthropic" */,
 			);
-			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -777,6 +776,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = V59J57D8PA;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Luno/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -800,6 +800,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = V59J57D8PA;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Luno/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

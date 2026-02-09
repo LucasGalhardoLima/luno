@@ -8,9 +8,6 @@ import SwiftUI
 struct FloatingCard<Content: View>: View {
     // MARK: - Properties
 
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State private var isPressed = false
-
     let content: Content
     let isSelected: Bool
     let onTap: (() -> Void)?
@@ -30,6 +27,13 @@ struct FloatingCard<Content: View>: View {
     // MARK: - Body
 
     var body: some View {
+        cardContent
+            .onTapGesture {
+                onTap?()
+            }
+    }
+
+    private var cardContent: some View {
         content
             .padding(LunoTheme.Spacing.md)
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -43,24 +47,6 @@ struct FloatingCard<Content: View>: View {
                     )
             }
             .cardShadow()
-            .scaleEffect(isPressed ? MicroTransitions.Scale.pressed : MicroTransitions.Scale.normal)
-            .animation(
-                reduceMotion ? nil : MicroTransitions.buttonPress,
-                value: isPressed
-            )
-            .onTapGesture {
-                onTap?()
-            }
-            .simultaneousGesture(
-                DragGesture(minimumDistance: 0)
-                    .onChanged { _ in
-                        guard onTap != nil else { return }
-                        isPressed = true
-                    }
-                    .onEnded { _ in
-                        isPressed = false
-                    }
-            )
     }
 }
 

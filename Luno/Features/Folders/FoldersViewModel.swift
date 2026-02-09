@@ -11,6 +11,8 @@ import SwiftUI
 final class FoldersViewModel {
     // MARK: - Properties
 
+    private let log = LunoLogger.ui
+
     /// Note counts per category
     private var categoryCounts: [PARACategory: Int] = [:]
 
@@ -42,17 +44,21 @@ final class FoldersViewModel {
         categoryCounts[category] ?? 0
     }
 
-    /// Fetch counts for all categories
+    /// Fetch counts for all categories from a single query
     func fetchCounts() async {
         isLoading = true
         defer { isLoading = false }
 
         do {
+            let allNotes = try await noteRepository.fetchNotes(category: nil)
+            var counts: [PARACategory: Int] = [:]
             for category in PARACategory.allCases {
-                let count = try await noteRepository.countNotes(category: category)
-                categoryCounts[category] = count
+                counts[category] = allNotes.filter { $0.category == category }.count
             }
+            categoryCounts = counts
+            log.debug("Folder counts updated: \(counts.map { "\($0.key.rawValue)=\($0.value)" }.joined(separator: ", ")), total=\(allNotes.count)")
         } catch {
+            log.error("Failed to fetch counts: \(error.localizedDescription)")
             self.error = .unknown(error.localizedDescription)
         }
     }

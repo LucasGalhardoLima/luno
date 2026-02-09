@@ -39,10 +39,14 @@ extension View {
 
     // MARK: - Staggered Animations
 
-    /// Apply staggered animation based on index
-    func staggeredAnimation(index: Int, baseDelay: Double = 0.05) -> some View {
-        let delay = Double(index) * baseDelay
-        return slideUpOnAppear(delay: delay)
+    /// Apply staggered animation based on index, capped to first visible batch
+    func staggeredAnimation(index: Int, baseDelay: Double = 0.05, maxAnimatedItems: Int = 10) -> some View {
+        if index < maxAnimatedItems {
+            let delay = Double(index) * baseDelay
+            return AnyView(slideUpOnAppear(delay: delay))
+        } else {
+            return AnyView(self)
+        }
     }
 }
 

@@ -29,7 +29,7 @@ describe('site config contract', () => {
   it('contains required waitlist and analytics fields', () => {
     expect(siteConfig.siteName.length).toBeGreaterThan(0);
     expect(siteConfig.defaultLocale).toBe('pt-BR');
-    expect(siteConfig.waitlistProvider).toBe('convertkit');
+    expect(siteConfig.waitlistProvider).toBe('formspree');
     expect(siteConfig.waitlistActionUrl.length).toBeGreaterThan(0);
     expect(typeof siteConfig.analyticsEnabled).toBe('boolean');
   });

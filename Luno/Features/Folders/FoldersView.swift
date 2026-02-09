@@ -8,6 +8,7 @@ import SwiftUI
 struct FoldersView: View {
     // MARK: - Properties
 
+    @Environment(AppState.self) private var appState
     @State private var viewModel: FoldersViewModel
     @State private var selectedCategory: PARACategory?
 
@@ -51,6 +52,12 @@ struct FoldersView: View {
             .task {
                 await viewModel.fetchCounts()
             }
+            .onAppear {
+                Task { await viewModel.fetchCounts() }
+            }
+            .onChange(of: appState.dataVersion) {
+                Task { await viewModel.fetchCounts() }
+            }
             .refreshable {
                 await viewModel.fetchCounts()
             }
@@ -89,7 +96,8 @@ struct FoldersView: View {
             columns: [GridItem(.flexible()), GridItem(.flexible())],
             spacing: LunoTheme.Spacing.md
         ) {
-            ForEach(Array(PARACategory.paraCategories.enumerated()), id: \.element) { index, category in
+            ForEach(Array(PARACategory.paraCategories.enumerated()), id: \.element) { indexedItem in
+                let (index, category) = (indexedItem.offset, indexedItem.element)
                 FolderCardView(
                     category: category,
                     noteCount: viewModel.noteCount(for: category)
@@ -197,6 +205,7 @@ struct FolderNotesView: View {
                         selectedNote = note
                     }
                     .staggeredAnimation(index: index)
+                    .compositingGroup()
                     .contextMenu {
                         noteContextMenu(for: note)
                     }
@@ -260,13 +269,11 @@ struct FolderNotesView: View {
     // MARK: - Actions
 
     private func moveNote(_ note: Note, to newCategory: PARACategory) async {
-        note.category = newCategory
         do {
-            try await noteRepository.update(note)
-            // Remove from this view since it no longer belongs to this folder
+            try await noteRepository.updateCategory(noteId: note.id, category: newCategory)
             notes.removeAll { $0.id == note.id }
         } catch {
-            note.category = category // Revert
+            // Failed to move
         }
     }
 
@@ -287,6 +294,7 @@ struct FolderNotesView: View {
                 .font(LunoTheme.Typography.largeTitle)
                 .foregroundStyle(LunoColors.PARA.color(for: category.rawValue).opacity(0.5))
                 .imageScale(.large)
+                .accessibilityHidden(true)
 
             Text("No \(category.displayName)")
                 .font(LunoTheme.Typography.title3)
@@ -317,7 +325,8 @@ struct FolderNotesView: View {
 
 #Preview("Folders View") {
     let repo = MockNoteRepository()
-    let _ = { // swiftformat:disable:next redundantLet
+    // swiftlint:disable:next redundant_discardable_let
+    let _ = {
         repo.notes = [
             Note(content: "Project 1", category: .project),
             Note(content: "Project 2", category: .project),
@@ -328,4 +337,5 @@ struct FolderNotesView: View {
     }()
 
     FoldersView(noteRepository: repo)
+        .environment(AppState())
 }

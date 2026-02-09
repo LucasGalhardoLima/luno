@@ -3,66 +3,115 @@ import type { LandingCopy } from './types';
 export const copyEn: LandingCopy = {
   locale: 'en-US',
   seo: {
-    title: 'Luno - Capture by voice and organize with PARA AI',
+    title: 'Luno - Executable clarity with PARA and voice capture',
     description:
-      'Capture ideas by voice or text. Luno automatically suggests PARA categories with one-tap confirmation.',
+      'Luno turns voice and text capture into organized execution using PARA, one-tap confirmation, and a focused workflow built for real use.',
   },
   nav: {
-    languageLabel: 'Language',
     cta: 'Join the waitlist',
   },
-  hero: {
+  chapters: {
+    hookTagline: 'Chapter 01 · Chaos',
+    revealTagline: 'Chapter 02 · Signal',
+    proofTagline: 'Chapter 04 · Proof and flow',
+    finaleTagline: 'Chapter 05 · Early access',
+  },
+  hook: {
     eyebrow: 'Luno for iOS',
-    title: 'Clarity for your ideas.',
+    title: 'Fast ideas need a fast system.',
     subtitle:
-      'Capture by voice or text. Luno uses AI to suggest the right PARA category, then you confirm in one tap.',
+      'When everything ends up in scattered notes, your energy goes to organizing instead of executing. Luno captures instantly and structures without drag.',
     ctaPrimary: 'Join the waitlist',
-    ctaSecondary: 'See how it works',
+    ctaSecondary: 'See the structure',
+    painChips: ['Scattered notes', 'Delayed review', 'Stalled projects', 'Lost context'],
   },
-  problem: {
-    title: 'Fast ideas get lost when organizing feels heavy.',
+  reveal: {
+    title: 'From mental noise to actionable structure.',
     body:
-      'Capturing is easy. Manual categorization is where friction starts, breaks flow, and causes abandonment.',
-  },
-  solution: {
-    title: 'Luno removes friction between capture and organization.',
-    bullets: [
-      'Voice-first with text fallback.',
-      'Automatic PARA suggestions: Projects, Areas, Resources, Archive.',
-      'Simple one-tap confirmation, no bloated flow.',
+      'Luno replaces taxonomy overload with a consistent flow: capture quickly, organize with PARA, and keep moving with clarity.',
+    truths: [
+      'Capture by voice or text in the same flow.',
+      'Get category suggestions without stopping to classify manually.',
+      'Confirm with one tap and return to execution.',
     ],
   },
-  steps: {
-    title: 'How it works',
-    items: [
+  paraMap: {
+    title: 'Why PARA is the foundation behind Luno',
+    subtitle:
+      'PARA is not a heavy filing system. It is a stable structure that makes fast placement and reliable retrieval possible.',
+    whyTitle: 'We chose PARA for speed and predictability.',
+    whyBody:
+      'At capture time, taxonomy decisions are expensive. PARA reduces that load and creates a reliable path from idea to execution.',
+    centerLabel: 'Luno Capture',
+    nodes: [
+      {
+        key: 'projects',
+        title: 'Projects',
+        body: 'Active outcomes with deadlines and clear next actions.',
+      },
+      {
+        key: 'areas',
+        title: 'Areas',
+        body: 'Ongoing responsibilities that require recurring maintenance.',
+      },
+      {
+        key: 'resources',
+        title: 'Resources',
+        body: 'Reference knowledge that supports future decisions and execution.',
+      },
+      {
+        key: 'archive',
+        title: 'Archive',
+        body: 'Inactive material kept safely without polluting current focus.',
+      },
+    ],
+    cta: 'See product proof',
+  },
+  proofFlow: {
+    title: 'Real proof with real screens, no inflated claims.',
+    subtitle:
+      'The interface is built for fast reading, immediate confirmation, and consistency between capture and organization.',
+    flowTitle: 'How it becomes execution',
+    steps: [
       {
         title: '1. Capture',
-        body: 'Hold the button and speak. Or type whenever privacy matters.',
+        body: 'Speak or type the instant an idea appears, without context switching.',
       },
       {
-        title: '2. AI organizes',
-        body: 'Luno suggests the best PARA category based on note context.',
+        title: '2. Organize',
+        body: 'AI suggests the PARA destination to keep your system consistent.',
       },
       {
-        title: '3. Confirm',
-        body: 'Accept or adjust. Your note stays in flow without overhead.',
+        title: '3. Execute',
+        body: 'Confirm and continue. Less maintenance, more progress.',
       },
+    ],
+    proofBullets: [
+      'Voice-first flow with text fallback.',
+      'Practical automatic PARA suggestions.',
+      'One-tap categorization confirmation.',
     ],
   },
   credibility: {
-    title: 'Built for real execution on iPhone',
+    title: 'Built for serious day-to-day use',
+    subtitle:
+      'Privacy-oriented architecture, native iOS experience, and an organization model designed to hold over time.',
     badges: ['iOS native', 'privacy-first', 'PARA native', 'on-device + cloud fallback'],
   },
   waitlist: {
     title: 'Get early access to Luno',
-    subtitle: 'Join the waitlist to test first and receive launch updates.',
+    subtitle: 'Be first in line and follow the iOS launch evolution.',
     emailLabel: 'Your best email',
     emailPlaceholder: 'you@email.com',
     submit: 'Get early access',
     pending: 'Submitting...',
-    success: 'Thanks. You are on the waitlist.',
-    error: 'Could not submit right now. Please try again shortly.',
-    privacyHint: 'By submitting, you agree to receive launch emails.',
+    success: 'Great. You are on the waitlist.',
+    error: 'Could not submit now. Please try again shortly.',
+    privacyHint: 'By submitting, you agree to receive launch updates.',
+  },
+  themeToggle: {
+    dark: 'Dark theme',
+    light: 'Light theme',
   },
   footer: {
     privacy: 'Privacy',
@@ -84,11 +133,11 @@ export const copyEn: LandingCopy = {
       },
       {
         title: 'Sharing',
-        body: 'Email list operations are handled by an external email provider (ConvertKit). We do not sell your data.',
+        body: 'List management is handled by an external form and email provider. We do not sell your data.',
       },
       {
         title: 'Your rights',
-        body: 'You can request removal at any time using the unsubscribe link in emails or by contacting us directly.',
+        body: 'You can request removal at any time through the unsubscribe link in emails or by contacting us directly.',
       },
     ],
     back: 'Back to landing',

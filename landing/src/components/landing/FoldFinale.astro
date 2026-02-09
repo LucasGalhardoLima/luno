@@ -1,0 +1,85 @@
+---
+import type { SiteConfig } from '@/config/site';
+import type { LandingCopy } from '@/content/types';
+
+interface Props {
+  copy: LandingCopy;
+  config: SiteConfig;
+}
+
+const { copy, config } = Astro.props;
+---
+
+<section class="fold fold-finale reveal" data-scene="finale" id="waitlist">
+  <div class="fold-shell finale-grid">
+    <div class="trust-panel">
+      <p class="chapter-tag" data-i18n="chapters.finaleTagline">{copy.chapters.finaleTagline}</p>
+      <h2 class="scene-title" data-i18n="credibility.title">{copy.credibility.title}</h2>
+      <p class="scene-body" data-i18n="credibility.subtitle">{copy.credibility.subtitle}</p>
+
+      <div class="badge-grid">
+        <span class="cred-badge" data-i18n="credibility.badges.0">{copy.credibility.badges[0]}</span>
+        <span class="cred-badge" data-i18n="credibility.badges.1">{copy.credibility.badges[1]}</span>
+        <span class="cred-badge" data-i18n="credibility.badges.2">{copy.credibility.badges[2]}</span>
+        <span class="cred-badge" data-i18n="credibility.badges.3">{copy.credibility.badges[3]}</span>
+      </div>
+    </div>
+
+    <form
+      id="waitlist-form"
+      class="waitlist-form"
+      action={config.waitlistActionUrl}
+      method="post"
+      novalidate
+    >
+      <h3 class="scene-title-sm" data-i18n="waitlist.title">{copy.waitlist.title}</h3>
+      <p class="scene-body" data-i18n="waitlist.subtitle">{copy.waitlist.subtitle}</p>
+
+      <div>
+        <label for="email" class="waitlist-label" data-i18n="waitlist.emailLabel">{copy.waitlist.emailLabel}</label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          required
+          autocomplete="email"
+          class="focus-ring waitlist-input"
+          data-i18n-placeholder="waitlist.emailPlaceholder"
+          placeholder={copy.waitlist.emailPlaceholder}
+        />
+      </div>
+
+      <input type="hidden" name="utm_source" id="utm_source" />
+      <input type="hidden" name="utm_medium" id="utm_medium" />
+      <input type="hidden" name="utm_campaign" id="utm_campaign" />
+      <input type="hidden" name="utm_term" id="utm_term" />
+      <input type="hidden" name="utm_content" id="utm_content" />
+      <input type="hidden" name="gclid" id="gclid" />
+      <input type="hidden" name="fbclid" id="fbclid" />
+      <input type="hidden" name="locale" id="locale" value="pt-BR" />
+
+      <p class="sr-only">
+        <label for="website">Leave this field empty</label>
+        <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+      </p>
+
+      <button
+        id="waitlist-submit"
+        type="submit"
+        class="focus-ring cta cta-primary cta-final"
+        data-default-label={copy.waitlist.submit}
+        data-i18n="waitlist.submit"
+      >
+        {copy.waitlist.submit}
+      </button>
+
+      <p id="form-feedback" class="waitlist-feedback" aria-live="polite"></p>
+      <p class="waitlist-legal">
+        <span data-i18n="waitlist.privacyHint">{copy.waitlist.privacyHint}</span>
+        <a href="/privacy" class="focus-ring legal-link" data-preserve-utm data-i18n="footer.privacy">
+          {copy.footer.privacy}
+        </a>
+      </p>
+    </form>
+  </div>
+</section>

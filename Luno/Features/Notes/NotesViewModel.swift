@@ -29,6 +29,7 @@ final class NotesViewModel {
     // MARK: - Dependencies
 
     private let noteRepository: any NoteRepositoryProtocol
+    private var searchTask: Task<Void, Never>?
 
     // MARK: - Initialization
 
@@ -51,7 +52,16 @@ final class NotesViewModel {
 
     // MARK: - Search
 
-    func search(query: String) async {
+    func search(query: String) {
+        searchTask?.cancel()
+        searchTask = Task {
+            try? await Task.sleep(for: .milliseconds(300))
+            guard !Task.isCancelled else { return }
+            await performSearch(query: query)
+        }
+    }
+
+    private func performSearch(query: String) async {
         isLoading = true
         defer { isLoading = false }
 
@@ -62,6 +72,7 @@ final class NotesViewModel {
                 notes = try await noteRepository.search(query: query)
             }
         } catch {
+            guard !Task.isCancelled else { return }
             self.error = .unknown(error.localizedDescription)
         }
     }

@@ -8,6 +8,7 @@ import SwiftUI
 struct NotesView: View {
     // MARK: - Properties
 
+    @Environment(AppState.self) private var appState
     @State private var viewModel: NotesViewModel
     @State private var selectedNote: Note?
     @State private var showSettings = false
@@ -41,9 +42,7 @@ struct NotesView: View {
             .navigationTitle("Notes")
             .searchable(text: $viewModel.searchText, prompt: "Search notes")
             .onChange(of: viewModel.searchText) { _, newValue in
-                Task {
-                    await viewModel.search(query: newValue)
-                }
+                viewModel.search(query: newValue)
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -66,6 +65,12 @@ struct NotesView: View {
             .task {
                 await viewModel.fetchNotes()
             }
+            .onAppear {
+                Task { await viewModel.fetchNotes() }
+            }
+            .onChange(of: appState.dataVersion) {
+                Task { await viewModel.fetchNotes() }
+            }
             .refreshable {
                 await viewModel.fetchNotes()
             }
@@ -80,11 +85,13 @@ struct NotesView: View {
     private var notesList: some View {
         ScrollView {
             LazyVStack(spacing: LunoTheme.Spacing.sm) {
-                ForEach(Array(viewModel.notes.enumerated()), id: \.element.id) { index, note in
+                ForEach(Array(viewModel.notes.enumerated()), id: \.element.id) { indexedNote in
+                    let (index, note) = (indexedNote.offset, indexedNote.element)
                     NoteCard(note: note) {
                         selectedNote = note
                     }
                     .staggeredAnimation(index: index)
+                    .compositingGroup()
                     .contextMenu {
                         noteContextMenu(for: note)
                     }
@@ -110,6 +117,7 @@ struct NotesView: View {
                 .font(LunoTheme.Typography.largeTitle)
                 .foregroundStyle(LunoColors.textSecondary.opacity(0.5))
                 .imageScale(.large)
+                .accessibilityHidden(true)
 
             Text("No Notes Yet")
                 .font(LunoTheme.Typography.title2)
@@ -192,15 +200,17 @@ struct NotesView: View {
 
 #Preview("Notes View") {
     let repo = MockNoteRepository()
-    let _ = { // swiftformat:disable:next redundantLet
+    // swiftlint:disable:next redundant_discardable_let
+    let _ = {
         repo.notes = [
             Note(content: "Finish landing page redesign by Friday", sourceType: .voice, category: .project, isPinned: true),
             Note(content: "Weekly health metrics review and exercise tracking", sourceType: .text, category: .area),
             Note(content: "Great article about SwiftUI performance optimization techniques", sourceType: .text, category: .resource),
             Note(content: "Q3 marketing campaign completed successfully", sourceType: .voice, category: .archive),
-            Note(content: "New idea for the app feature", sourceType: .voice, category: .uncategorized)
+            Note(content: "New idea for the app feature", sourceType: .voice, category: .uncategorized),
         ]
     }()
 
     NotesView(noteRepository: repo)
+        .environment(AppState())
 }

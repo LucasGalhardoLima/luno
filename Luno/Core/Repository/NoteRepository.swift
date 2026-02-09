@@ -92,6 +92,17 @@ actor NoteRepository: NoteRepositoryProtocol {
         log.debug("Note updated: \(note.id)")
     }
 
+    func updateCategory(noteId: UUID, category: PARACategory) async throws {
+        let descriptor = FetchDescriptor<Note>(
+            predicate: #Predicate<Note> { note in note.id == noteId }
+        )
+        guard let note = try modelContext.fetch(descriptor).first else { return }
+        note.category = category
+        note.modifiedAt = Date()
+        try modelContext.save()
+        log.debug("Note category updated to \(category.rawValue): \(noteId)")
+    }
+
     func delete(_ note: Note) async throws {
         let id = note.id
         modelContext.delete(note)

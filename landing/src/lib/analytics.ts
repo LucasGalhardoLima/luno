@@ -6,7 +6,8 @@ export type LandingEventName =
   | 'waitlist_submit_start'
   | 'waitlist_submit_success'
   | 'waitlist_submit_error'
-  | 'language_switch';
+  | 'story_scene_view'
+  | 'theme_toggle';
 
 export type AnalyticsPayload = Record<string, string | number | boolean | null>;
 

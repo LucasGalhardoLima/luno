@@ -7,30 +7,50 @@ export interface LandingCopy {
     description: string;
   };
   nav: {
-    languageLabel: string;
     cta: string;
   };
-  hero: {
+  chapters: {
+    hookTagline: string;
+    revealTagline: string;
+    proofTagline: string;
+    finaleTagline: string;
+  };
+  hook: {
     eyebrow: string;
     title: string;
     subtitle: string;
     ctaPrimary: string;
     ctaSecondary: string;
+    painChips: string[];
   };
-  problem: {
+  reveal: {
     title: string;
     body: string;
+    truths: string[];
   };
-  solution: {
+  paraMap: {
     title: string;
-    bullets: string[];
+    subtitle: string;
+    whyTitle: string;
+    whyBody: string;
+    centerLabel: string;
+    nodes: Array<{
+      key: 'projects' | 'areas' | 'resources' | 'archive';
+      title: string;
+      body: string;
+    }>;
+    cta: string;
   };
-  steps: {
+  proofFlow: {
     title: string;
-    items: Array<{ title: string; body: string }>;
+    subtitle: string;
+    flowTitle: string;
+    steps: Array<{ title: string; body: string }>;
+    proofBullets: string[];
   };
   credibility: {
     title: string;
+    subtitle: string;
     badges: string[];
   };
   waitlist: {
@@ -43,6 +63,10 @@ export interface LandingCopy {
     success: string;
     error: string;
     privacyHint: string;
+  };
+  themeToggle: {
+    dark: string;
+    light: string;
   };
   footer: {
     privacy: string;

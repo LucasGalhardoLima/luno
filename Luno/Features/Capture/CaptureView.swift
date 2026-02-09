@@ -10,11 +10,16 @@ struct CaptureView: View {
 
     @Environment(\.modelContext) private var modelContext
     @State private var viewModel: CaptureViewModel
+    @FocusState private var isTextEditorFocused: Bool
 
     // MARK: - Initialization
 
-    init(noteRepository: any NoteRepositoryProtocol) {
-        _viewModel = State(initialValue: CaptureViewModel(noteRepository: noteRepository))
+    init(noteRepository: any NoteRepositoryProtocol, categorizationService: any CategorizationOrchestratorProtocol, appState: AppState? = nil) {
+        _viewModel = State(initialValue: CaptureViewModel(
+            noteRepository: noteRepository,
+            categorizationService: categorizationService,
+            appState: appState
+        ))
     }
 
     // MARK: - Body
@@ -68,10 +73,9 @@ struct CaptureView: View {
                     CategorizationSheet(
                         note: note,
                         categorizationResult: viewModel.categorizationResult,
+                        isCategorizing: viewModel.isCategorizing,
                         onAccept: { category in
-                            Task {
-                                await viewModel.applyCategory(category, to: note)
-                            }
+                            await viewModel.applyCategory(category, to: note)
                         },
                         onSkip: {
                             // Leave as uncategorized
@@ -162,6 +166,7 @@ struct CaptureView: View {
         VStack(spacing: LunoTheme.Spacing.md) {
             // Text editor
             TextEditor(text: $viewModel.transcription)
+                .focused($isTextEditorFocused)
                 .font(LunoTheme.Typography.body)
                 .foregroundStyle(LunoColors.textPrimary)
                 .scrollContentBackground(.hidden)
@@ -180,6 +185,7 @@ struct CaptureView: View {
                 .frame(maxHeight: .infinity)
                 .padding(.top, LunoTheme.Spacing.md)
                 .accessibilityLabel("Note text input")
+                .accessibilityValue("\(viewModel.transcription.count) characters")
         }
     }
 
@@ -188,6 +194,7 @@ struct CaptureView: View {
             Image(systemName: "mic.fill")
                 .font(LunoTheme.Typography.largeTitle)
                 .foregroundStyle(LunoColors.textSecondary.opacity(0.5))
+                .accessibilityHidden(true)
 
             Text("Tap to start recording")
                 .font(LunoTheme.Typography.body)
@@ -249,6 +256,7 @@ struct CaptureView: View {
             } else {
                 // Save button for text mode
                 Button {
+                    isTextEditorFocused = false
                     Task {
                         await viewModel.saveNote()
                     }
@@ -340,5 +348,5 @@ struct CaptureView: View {
 // MARK: - Preview
 
 #Preview("Capture View") {
-    CaptureView(noteRepository: MockNoteRepository())
+    CaptureView(noteRepository: MockNoteRepository(), categorizationService: MockCategorizationOrchestrator())
 }

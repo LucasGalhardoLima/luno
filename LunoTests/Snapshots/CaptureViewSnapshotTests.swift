@@ -10,7 +10,7 @@ final class CaptureViewSnapshotTests: XCTestCase {
 
     func test_captureView_voiceMode_idle() {
         let repo = MockNoteRepository()
-        let view = CaptureView(noteRepository: repo)
+        let view = CaptureView(noteRepository: repo, categorizationService: MockCategorizationOrchestrator())
 
         let controller = UIHostingController(rootView: view)
         controller.view.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
@@ -22,7 +22,7 @@ final class CaptureViewSnapshotTests: XCTestCase {
 
     func test_captureView_textMode() {
         let repo = MockNoteRepository()
-        let view = CaptureView(noteRepository: repo)
+        let view = CaptureView(noteRepository: repo, categorizationService: MockCategorizationOrchestrator())
 
         let controller = UIHostingController(rootView: view)
         controller.view.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
@@ -37,7 +37,7 @@ final class CaptureViewSnapshotTests: XCTestCase {
 
     func test_captureView_darkMode() {
         let repo = MockNoteRepository()
-        let view = CaptureView(noteRepository: repo)
+        let view = CaptureView(noteRepository: repo, categorizationService: MockCategorizationOrchestrator())
             .environment(\.colorScheme, .dark)
 
         let controller = UIHostingController(rootView: view)

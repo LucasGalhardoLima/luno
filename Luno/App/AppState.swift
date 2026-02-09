@@ -13,6 +13,15 @@ final class AppState {
     /// Currently selected tab
     var selectedTab: AppTab = .capture
 
+    // MARK: - Data
+
+    /// Incremented when notes data changes, triggers view refreshes
+    var dataVersion: Int = 0
+
+    func notifyDataChanged() {
+        dataVersion += 1
+    }
+
     // MARK: - UI State
 
     /// Whether the app is currently recording

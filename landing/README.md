@@ -27,14 +27,14 @@ npm run build
 
 ## Variáveis de ambiente
 
-- `PUBLIC_WAITLIST_ACTION_URL`: endpoint do formulário ConvertKit
+- `PUBLIC_WAITLIST_ACTION_URL`: endpoint do formulário Formspree
 - `PUBLIC_ANALYTICS_ENABLED`: `true` ou `false`
 - `SITE_URL`: domínio canônico para meta tags/sitemap
 
 Exemplo `.env`:
 
 ```bash
-PUBLIC_WAITLIST_ACTION_URL="https://app.convertkit.com/forms/SEU_FORM_ID/subscriptions"
+PUBLIC_WAITLIST_ACTION_URL="https://formspree.io/f/SEU_FORM_ID"
 PUBLIC_ANALYTICS_ENABLED="true"
 SITE_URL="https://luno.app"
 ```

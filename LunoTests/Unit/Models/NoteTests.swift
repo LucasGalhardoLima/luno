@@ -1,3 +1,4 @@
+// swiftlint:disable single_test_class
 @testable import Luno
 import SwiftData
 import XCTest

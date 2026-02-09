@@ -1,0 +1,66 @@
+---
+import type { LandingCopy } from '@/content/types';
+
+interface Props {
+  copy: LandingCopy;
+}
+
+const { copy } = Astro.props;
+---
+
+<section class="fold fold-para reveal" data-scene="para-map" id="fold-para-map">
+  <div class="fold-shell para-grid">
+    <div class="para-copy">
+      <h2 class="scene-title" data-i18n="paraMap.title">{copy.paraMap.title}</h2>
+      <p class="scene-body" data-i18n="paraMap.subtitle">{copy.paraMap.subtitle}</p>
+
+      <h3 class="scene-title-sm" data-i18n="paraMap.whyTitle">{copy.paraMap.whyTitle}</h3>
+      <p class="scene-body" data-i18n="paraMap.whyBody">{copy.paraMap.whyBody}</p>
+
+      <a
+        href="#fold-proof-flow"
+        class="focus-ring cta cta-primary"
+        data-preserve-utm
+        data-track-cta
+        data-i18n="paraMap.cta"
+      >
+        {copy.paraMap.cta}
+      </a>
+    </div>
+
+    <div class="para-map" aria-label="PARA system map">
+      <div class="map-center" data-map-node>
+        <span data-i18n="paraMap.centerLabel">{copy.paraMap.centerLabel}</span>
+      </div>
+
+      <article class="map-node map-node-projects" data-map-node>
+        <h4 data-i18n="paraMap.nodes.0.title">{copy.paraMap.nodes[0].title}</h4>
+        <p data-i18n="paraMap.nodes.0.body">{copy.paraMap.nodes[0].body}</p>
+      </article>
+
+      <article class="map-node map-node-areas" data-map-node>
+        <h4 data-i18n="paraMap.nodes.1.title">{copy.paraMap.nodes[1].title}</h4>
+        <p data-i18n="paraMap.nodes.1.body">{copy.paraMap.nodes[1].body}</p>
+      </article>
+
+      <article class="map-node map-node-resources" data-map-node>
+        <h4 data-i18n="paraMap.nodes.2.title">{copy.paraMap.nodes[2].title}</h4>
+        <p data-i18n="paraMap.nodes.2.body">{copy.paraMap.nodes[2].body}</p>
+      </article>
+
+      <article class="map-node map-node-archive" data-map-node>
+        <h4 data-i18n="paraMap.nodes.3.title">{copy.paraMap.nodes[3].title}</h4>
+        <p data-i18n="paraMap.nodes.3.body">{copy.paraMap.nodes[3].body}</p>
+      </article>
+
+      <svg class="map-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M50 50 L25 24" />
+        <path d="M50 50 L76 24" />
+        <path d="M50 50 L24 76" />
+        <path d="M50 50 L76 76" />
+      </svg>
+    </div>
+  </div>
+
+  <div class="chapter-transition chapter-transition-para" aria-hidden="true"></div>
+</section>

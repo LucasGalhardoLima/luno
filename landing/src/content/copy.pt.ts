@@ -3,66 +3,115 @@ import type { LandingCopy } from './types';
 export const copyPt: LandingCopy = {
   locale: 'pt-BR',
   seo: {
-    title: 'Luno - Capture por voz e organize com IA no método PARA',
+    title: 'Luno - Clareza executável com método PARA e captura por voz',
     description:
-      'Capture ideias por voz ou texto. O Luno organiza automaticamente no método PARA com confirmação em um toque.',
+      'Luno transforma captura por voz e texto em execução organizada com método PARA, confirmação em um toque e foco real no que importa.',
   },
   nav: {
-    languageLabel: 'Idioma',
     cta: 'Entrar na waitlist',
   },
-  hero: {
+  chapters: {
+    hookTagline: 'Capítulo 01 · Caos',
+    revealTagline: 'Capítulo 02 · Sinal',
+    proofTagline: 'Capítulo 04 · Prova e fluxo',
+    finaleTagline: 'Capítulo 05 · Lançamento antecipado',
+  },
+  hook: {
     eyebrow: 'Luno para iOS',
-    title: 'Clareza para suas ideias.',
+    title: 'Ideias rápidas pedem um sistema rápido.',
     subtitle:
-      'Capture por voz ou texto. O Luno aplica IA para sugerir a categoria certa no método PARA e você confirma em um toque.',
+      'Quando tudo fica em notas soltas, a energia vai para organizar e não para executar. Luno captura no impulso e organiza sem fricção.',
     ctaPrimary: 'Entrar na waitlist',
-    ctaSecondary: 'Ver como funciona',
+    ctaSecondary: 'Ver estrutura',
+    painChips: ['Notas sem destino', 'Revisão adiada', 'Projetos sem tração', 'Contexto perdido'],
   },
-  problem: {
-    title: 'Ideias rápidas se perdem quando organizar dá trabalho.',
+  reveal: {
+    title: 'Do ruído mental para estrutura acionável.',
     body:
-      'Capturar é fácil. O atrito está na categorização manual, que quebra o fluxo e leva ao abandono do sistema.',
-  },
-  solution: {
-    title: 'Luno reduz a fricção entre capturar e organizar.',
-    bullets: [
-      'Voice-first com alternativa de digitação.',
-      'Sugestão automática em Projects, Areas, Resources ou Archive.',
-      'Confirmação simples em 1 toque, sem fluxo pesado.',
+      'Luno troca a sobrecarga de microdecisões por um fluxo consistente: capturar rápido, organizar com PARA e seguir com clareza.',
+    truths: [
+      'Capture por voz ou texto no mesmo fluxo.',
+      'Receba sugestão de categoria sem parar para classificar manualmente.',
+      'Confirme em um toque e volte ao que importa.',
     ],
   },
-  steps: {
-    title: 'Como funciona',
-    items: [
+  paraMap: {
+    title: 'Por que PARA é a fundação do Luno',
+    subtitle:
+      'PARA não é um catálogo complexo. É uma estrutura estável para decidir rápido onde cada ideia vive, sem travar a captura.',
+    whyTitle: 'Escolhemos PARA por velocidade e previsibilidade.',
+    whyBody:
+      'No momento da ideia, o custo de pensar em taxonomia é alto. PARA reduz essa carga e cria um caminho claro para recuperar e executar depois.',
+    centerLabel: 'Luno Capture',
+    nodes: [
       {
-        title: '1. Capturar',
-        body: 'Segure o botão e fale. Ou digite quando preferir discrição.',
+        key: 'projects',
+        title: 'Projects',
+        body: 'Resultados ativos com prazo e próxima ação definida.',
       },
       {
-        title: '2. IA organiza',
-        body: 'Luno sugere a categoria PARA com base no contexto da nota.',
+        key: 'areas',
+        title: 'Areas',
+        body: 'Responsabilidades contínuas que precisam de manutenção recorrente.',
       },
       {
-        title: '3. Confirmar',
-        body: 'Aceite ou ajuste. Sua nota entra no fluxo sem burocracia.',
+        key: 'resources',
+        title: 'Resources',
+        body: 'Conhecimento de referência para decisões e execução futura.',
       },
+      {
+        key: 'archive',
+        title: 'Archive',
+        body: 'Materiais inativos preservados sem poluir seu foco atual.',
+      },
+    ],
+    cta: 'Ver prova no produto',
+  },
+  proofFlow: {
+    title: 'Prova real em telas reais, sem promessas artificiais.',
+    subtitle:
+      'A interface foi desenhada para leitura rápida, confirmação imediata e consistência entre captura e organização.',
+    flowTitle: 'Como vira execução',
+    steps: [
+      {
+        title: '1. Capture',
+        body: 'Fale ou digite no instante da ideia, sem quebrar contexto.',
+      },
+      {
+        title: '2. Organize',
+        body: 'A IA sugere o destino PARA para manter consistência.',
+      },
+      {
+        title: '3. Execute',
+        body: 'Você confirma e segue. Menos manutenção, mais avanço.',
+      },
+    ],
+    proofBullets: [
+      'Fluxo voice-first com fallback para texto.',
+      'Sugestão PARA automática e prática.',
+      'Confirmação de categorização em um toque.',
     ],
   },
   credibility: {
-    title: 'Feito para execução real no iPhone',
+    title: 'Construído para uso sério no dia a dia',
+    subtitle:
+      'Arquitetura orientada a privacidade, experiência nativa iOS e um sistema de organização pensado para durar.',
     badges: ['iOS native', 'privacy-first', 'PARA native', 'on-device + cloud fallback'],
   },
   waitlist: {
     title: 'Acesso antecipado ao Luno',
-    subtitle: 'Entre na waitlist para testar primeiro e receber novidades do lançamento.',
+    subtitle: 'Receba o convite primeiro e acompanhe a evolução da versão iOS.',
     emailLabel: 'Seu melhor e-mail',
     emailPlaceholder: 'voce@email.com',
     submit: 'Quero acesso antecipado',
     pending: 'Enviando...',
-    success: 'Obrigado. Você entrou na waitlist.',
+    success: 'Perfeito. Você entrou na waitlist.',
     error: 'Não foi possível enviar agora. Tente novamente em instantes.',
-    privacyHint: 'Ao enviar, você aceita receber e-mails sobre o lançamento.',
+    privacyHint: 'Ao enviar, você aceita receber atualizações do lançamento.',
+  },
+  themeToggle: {
+    dark: 'Tema escuro',
+    light: 'Tema claro',
   },
   footer: {
     privacy: 'Privacidade',
@@ -84,7 +133,7 @@ export const copyPt: LandingCopy = {
       },
       {
         title: 'Compartilhamento',
-        body: 'A gestão da lista é feita por provedor externo de e-mail marketing (ConvertKit). Não vendemos seus dados.',
+        body: 'A gestão da lista é feita por provedor externo de formulários e e-mail. Não vendemos seus dados.',
       },
       {
         title: 'Seus direitos',

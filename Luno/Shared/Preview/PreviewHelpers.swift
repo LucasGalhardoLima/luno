@@ -39,6 +39,13 @@
             note.modifiedAt = Date()
         }
 
+        func updateCategory(noteId: UUID, category: PARACategory) async throws {
+            if let note = notes.first(where: { $0.id == noteId }) {
+                note.category = category
+                note.modifiedAt = Date()
+            }
+        }
+
         func delete(_ note: Note) async throws {
             deleteCallCount += 1
             notes.removeAll { $0.id == note.id }
@@ -58,6 +65,45 @@
 
         func countNotes(category: PARACategory) async throws -> Int {
             notes.filter { $0.category == category }.count
+        }
+    }
+
+    // MARK: - Preview Mock Categorization Service
+
+    final class MockCategorizationOrchestrator: CategorizationOrchestratorProtocol, @unchecked Sendable {
+        var mockResult: CategorizedNote?
+        var mockIsAvailable: Bool = true
+        var categorizeCallCount = 0
+
+        var isAvailable: Bool {
+            get async { mockIsAvailable }
+        }
+
+        var confidenceThreshold: Double { 0.8 }
+
+        func checkAvailability() async -> CategorizationAvailability {
+            mockIsAvailable ? .available : .unavailable(reason: .noApiKey)
+        }
+
+        func categorize(_ content: String) async throws -> CategorizationResult {
+            let result = try await categorizeWithFallback(content)
+            return result.result
+        }
+
+        func categorizeWithFallback(_ content: String) async throws -> CategorizedNote {
+            categorizeCallCount += 1
+            if let result = mockResult {
+                return result
+            }
+            return CategorizedNote(
+                result: CategorizationResult(
+                    category: .project,
+                    reasoning: "Mock categorization",
+                    confidence: 0.9
+                ),
+                source: .cloud,
+                processingTime: 0.1
+            )
         }
     }
 #endif

@@ -43,6 +43,7 @@ final class CaptureViewModel {
     private let speechService: any SpeechServiceProtocol
     private let noteRepository: any NoteRepositoryProtocol
     private let categorizationService: (any CategorizationOrchestratorProtocol)?
+    private let appState: AppState?
 
     // MARK: - Private State
 
@@ -53,11 +54,13 @@ final class CaptureViewModel {
     init(
         speechService: any SpeechServiceProtocol = SpeechService(),
         noteRepository: any NoteRepositoryProtocol,
-        categorizationService: (any CategorizationOrchestratorProtocol)? = nil
+        categorizationService: (any CategorizationOrchestratorProtocol)? = nil,
+        appState: AppState? = nil
     ) {
         self.speechService = speechService
         self.noteRepository = noteRepository
         self.categorizationService = categorizationService
+        self.appState = appState
     }
 
     // MARK: - Authorization
@@ -146,11 +149,14 @@ final class CaptureViewModel {
             try await noteRepository.save(note)
             savedNote = note
             categorizationResult = nil
+            isCategorizing = true
             resetCapture()
             showCategorizationSheet = true
+            appState?.notifyDataChanged()
 
             // Trigger async categorization in background
             await categorizeNote(note)
+            isCategorizing = false
         } catch {
             self.error = .saveFailed(error.localizedDescription)
             captureState = .reviewing
@@ -159,10 +165,14 @@ final class CaptureViewModel {
 
     /// Apply a category chosen by the user from the categorization sheet
     func applyCategory(_ category: PARACategory, to note: Note) async {
-        note.category = category
+        let log = LunoLogger.ui
+        log.debug("Applying category \(category.rawValue) to note \(note.id)")
         do {
-            try await noteRepository.update(note)
+            try await noteRepository.updateCategory(noteId: note.id, category: category)
+            log.debug("Category applied successfully, notifying data changed")
+            appState?.notifyDataChanged()
         } catch {
+            log.error("Failed to apply category: \(error.localizedDescription)")
             self.error = .saveFailed(error.localizedDescription)
         }
     }
@@ -174,9 +184,6 @@ final class CaptureViewModel {
 
         let available = await service.isAvailable
         guard available else { return }
-
-        isCategorizing = true
-        defer { isCategorizing = false }
 
         do {
             let result = try await service.categorizeWithFallback(note.content)

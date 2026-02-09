@@ -70,7 +70,6 @@ actor CategorizationService: @preconcurrency CategorizationOrchestratorProtocol 
     func categorizeWithFallback(_ content: String) async throws -> CategorizedNote {
         let startTime = Date()
 
-        // Validate content
         let trimmed = content.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else {
             log.warning("Categorization requested with empty content")
@@ -79,62 +78,55 @@ actor CategorizationService: @preconcurrency CategorizationOrchestratorProtocol 
 
         log.info("Starting categorization for content (\(trimmed.count) chars)")
 
-        // Strategy 1: Try on-device first
-        let onDeviceAvailable = await onDeviceService.isAvailable
-        if onDeviceAvailable {
-            do {
-                let result = try await onDeviceService.categorize(trimmed)
-
-                // Check if confidence meets threshold
-                if result.confidence >= config.confidenceThreshold {
-                    let elapsed = Date().timeIntervalSince(startTime)
-                    log.info("On-device categorization succeeded: \(result.category.rawValue) (\(String(format: "%.0f", result.confidence * 100))%%) in \(String(format: "%.2f", elapsed))s")
-                    return CategorizedNote(
-                        result: result,
-                        source: .onDevice,
-                        processingTime: elapsed
-                    )
-                }
-
-                log.info("On-device confidence \(String(format: "%.0f", result.confidence * 100))%% below threshold \(String(format: "%.0f", config.confidenceThreshold * 100))%%, falling back to cloud")
-            } catch {
-                log.warning("On-device categorization failed: \(error.localizedDescription), falling back to cloud")
-            }
-        } else {
-            log.debug("On-device categorization not available")
+        if let result = try await tryOnDeviceCategorization(trimmed, startTime: startTime) {
+            return result
         }
 
-        // Strategy 2: Fall back to cloud
-        let cloudAvailable = await cloudService.isAvailable
-        if cloudAvailable {
-            do {
-                let result = try await cloudService.categorize(trimmed)
-                let elapsed = Date().timeIntervalSince(startTime)
-
-                log.info("Cloud categorization succeeded: \(result.category.rawValue) (\(String(format: "%.0f", result.confidence * 100))%%) in \(String(format: "%.2f", elapsed))s")
-
-                // Store as training example for on-device improvement
-                if config.storeTrainingExamples {
-                    await storeTrainingExample(
-                        content: trimmed,
-                        result: result
-                    )
-                }
-
-                return CategorizedNote(
-                    result: result,
-                    source: .cloud,
-                    processingTime: elapsed
-                )
-            } catch {
-                log.error("Cloud categorization failed: \(error.localizedDescription)")
-                throw error
-            }
+        if let result = try await tryCloudCategorization(trimmed, startTime: startTime) {
+            return result
         }
 
-        // Strategy 3: Both unavailable
         log.error("Both on-device and cloud categorization unavailable")
         throw CategorizationError.serviceUnavailable(reason: .noNetwork)
+    }
+
+    private func tryOnDeviceCategorization(_ content: String, startTime: Date) async throws -> CategorizedNote? {
+        let onDeviceAvailable = await onDeviceService.isAvailable
+        guard onDeviceAvailable else {
+            log.debug("On-device categorization not available")
+            return nil
+        }
+
+        let threshold = config.confidenceThreshold
+        do {
+            let result = try await onDeviceService.categorize(content)
+            if result.confidence >= threshold {
+                let elapsed = Date().timeIntervalSince(startTime)
+                log.info("On-device categorization succeeded: \(result.category.rawValue) (\(String(format: "%.0f", result.confidence * 100))%%) in \(String(format: "%.2f", elapsed))s")
+                return CategorizedNote(result: result, source: .onDevice, processingTime: elapsed)
+            }
+            log.info("On-device confidence \(String(format: "%.0f", result.confidence * 100))%% below threshold \(String(format: "%.0f", threshold * 100))%%, falling back to cloud")
+        } catch {
+            log.warning("On-device categorization failed: \(error.localizedDescription), falling back to cloud")
+        }
+        return nil
+    }
+
+    private func tryCloudCategorization(_ content: String, startTime: Date) async throws -> CategorizedNote? {
+        let cloudAvailable = await cloudService.isAvailable
+        guard cloudAvailable else { return nil }
+
+        let shouldStoreTraining = config.storeTrainingExamples
+        let result = try await cloudService.categorize(content)
+        let elapsed = Date().timeIntervalSince(startTime)
+
+        log.info("Cloud categorization succeeded: \(result.category.rawValue) (\(String(format: "%.0f", result.confidence * 100))%%) in \(String(format: "%.2f", elapsed))s")
+
+        if shouldStoreTraining {
+            await storeTrainingExample(content: content, result: result)
+        }
+
+        return CategorizedNote(result: result, source: .cloud, processingTime: elapsed)
     }
 
     // MARK: - Training Example Storage

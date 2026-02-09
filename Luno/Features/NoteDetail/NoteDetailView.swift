@@ -127,6 +127,7 @@ struct NoteDetailView: View {
                 Image(systemName: "chevron.right")
                     .font(LunoTheme.Typography.caption2)
                     .foregroundStyle(LunoColors.textSecondary)
+                    .accessibilityHidden(true)
 
                 Spacer()
 
@@ -140,7 +141,7 @@ struct NoteDetailView: View {
             .background(LunoColors.cardBackground)
             .clipShape(RoundedRectangle(cornerRadius: LunoTheme.CornerRadius.sm))
         }
-        .accessibilityLabel("Category: \(viewModel.note.category.displayName). Tap to change.")
+        .accessibilityLabel("Category: \(viewModel.note.category.displayName)\(viewModel.note.categoryConfidence > 0 ? ", AI confidence \(Int(viewModel.note.categoryConfidence * 100)) percent" : ""). Tap to change.")
     }
 
     // MARK: - Content Section

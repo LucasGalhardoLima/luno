@@ -1,38 +1,48 @@
 # Manual QA Checklist
 
-## Conteúdo e idioma
+## Story + rendering
 
-- [ ] Abrir `/` em PT-BR por padrão quando `navigator.language` for `pt-*`.
-- [ ] Alternar idioma para EN no toggle sem recarregar a página.
-- [ ] Confirmar que todas as seções mantêm estrutura e copy equivalente em PT/EN.
+- [ ] All folds render in order: hook, reveal, para-map, proof-flow, finale.
+- [ ] No scene looks visually empty at 1440px, 1024px, 768px, and 390px widths.
+- [ ] Hero CTA, PARA bridge CTA, and final submit CTA are visible and route correctly.
+- [ ] First visit defaults to dark, then follows persisted `luno-theme` choice.
+- [ ] Theme toggle changes between dark/light and persists after reload.
 
-## Conversão
+## Locale behavior (auto only)
 
-- [ ] Clicar CTA do hero envia para `#waitlist` e dispara evento `hero_cta_click`.
-- [ ] Enviar e-mail válido exibe mensagem de sucesso inline.
-- [ ] Enviar e-mail inválido exibe mensagem de erro acessível (`aria-live`).
-- [ ] Honeypot preenchido impede envio.
+- [ ] Browser locale `pt-*` renders PT-BR copy.
+- [ ] Browser locale `en-*` renders EN copy.
+- [ ] Unsupported locale falls back to PT-BR.
+- [ ] No visible language switcher in header or footer.
 
-## UTM
+## Conversion
 
-- [ ] Acessar com query `?utm_source=x&utm_campaign=y`.
-- [ ] Verificar hidden inputs do formulário preenchidos com UTM.
-- [ ] Verificar links internos com `data-preserve-utm` preservando parâmetros.
+- [ ] Hero and trust CTAs trigger `hero_cta_click` event.
+- [ ] Valid email submit shows inline success state.
+- [ ] Invalid email shows accessible error (`aria-live`).
+- [ ] Honeypot filled prevents submission.
 
-## Responsividade
+## Scene analytics
 
-- [ ] 320px: sem overflow horizontal e CTA legível.
-- [ ] 768px: grid e spacing consistentes.
-- [ ] 1024px: hero em duas colunas equilibradas.
-- [ ] 1440px: largura máxima e ritmo visual corretos.
+- [ ] `landing_view` fires on load.
+- [ ] `story_scene_view` fires once per fold with scene id in: `hook`, `reveal`, `para-map`, `proof-flow`, `finale`.
+- [ ] `theme_toggle` fires with `from` and `to`.
+- [ ] `waitlist_submit_start/success/error` fire in expected paths.
 
-## Acessibilidade
+## UTM preservation
 
-- [ ] Navegação por teclado com foco visível em botões/links/campos.
-- [ ] Contraste AA em textos principais.
-- [ ] Labels de input e toggle de idioma presentes.
+- [ ] Open with `?utm_source=x&utm_campaign=y`.
+- [ ] Hidden form fields include those values.
+- [ ] Internal links with `data-preserve-utm` retain params.
 
-## Performance
+## Motion and fallbacks
 
-- [ ] Lighthouse mobile >= 95 (Performance, Best Practices, SEO).
-- [ ] LCP < 2.5s e CLS < 0.1.
+- [ ] Desktop: micro-transitions, reveal stagger, and tilt/parallax-lite are active.
+- [ ] Mobile (`<=900px`): heavy effects are disabled, content remains polished.
+- [ ] `prefers-reduced-motion: reduce`: no heavy animated loops/parallax.
+
+## Accessibility and performance
+
+- [ ] Keyboard focus is visible on links, inputs, and buttons.
+- [ ] Text contrast passes AA.
+- [ ] Lighthouse mobile >= 95; LCP < 2.5s; CLS < 0.1.

@@ -18,6 +18,22 @@ const canonical = new URL(Astro.url.pathname, siteOrigin).toString();
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
+    <script is:inline>
+      (() => {
+        const storageKey = 'luno-theme';
+        const root = document.documentElement;
+        try {
+          const stored = window.localStorage.getItem(storageKey);
+          const isStored = stored === 'dark' || stored === 'light';
+          const fromSystem = window.matchMedia('(prefers-color-scheme: light)').matches
+            ? 'light'
+            : 'dark';
+          root.dataset.theme = isStored ? stored : fromSystem;
+        } catch {
+          root.dataset.theme = 'dark';
+        }
+      })();
+    </script>
     <title>{pageTitle}</title>
     <meta name="description" content={pageDescription} id="meta-description" />
     <link rel="canonical" href={canonical} />

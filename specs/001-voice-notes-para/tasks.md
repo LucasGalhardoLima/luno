@@ -233,18 +233,18 @@
 
 **Purpose**: Quality improvements that affect multiple user stories
 
-- [ ] T088 [P] Run Accessibility Inspector audit on all screens
+- [x] T088 [P] Run Accessibility Inspector audit on all screens
 - [x] T089 [P] Add VoiceOver labels to all interactive elements
 - [x] T090 [P] Implement Dynamic Type support across all text
 - [x] T091 [P] Add Reduce Motion support to all animations
 - [x] T092 [P] Snapshot tests for CaptureView in LunoTests/Snapshots/CaptureViewSnapshotTests.swift
-- [ ] T093 Performance profiling and optimization for app launch time (<400ms)
-- [ ] T094 Performance profiling for scroll animations (60fps target)
+- [x] T093 Performance profiling and optimization for app launch time (<400ms)
+- [x] T094 Performance profiling for scroll animations (60fps target)
 - [x] T095 [P] Add structured logging throughout services
 - [x] T096 [P] Create Settings screen with API key configuration in Luno/Features/Settings/
 - [x] T097 [P] Implement iCloud sync toggle in Settings (SyncService)
-- [ ] T098 Run quickstart.md validation - verify all setup steps work
-- [ ] T099 Final code cleanup and SwiftLint/SwiftFormat pass
+- [x] T098 Run quickstart.md validation - verify all setup steps work
+- [x] T099 Final code cleanup and SwiftLint/SwiftFormat pass
 
 ---
 

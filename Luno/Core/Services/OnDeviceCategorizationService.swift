@@ -142,30 +142,42 @@ actor OnDeviceCategorizationService: CategorizationServiceProtocol {
     }
 
     private func computeCategoryScores(for text: String) -> [CategoryScore] {
-        let keywordMap: [(PARACategory, [String], String)] = [
-            (.project, ["deadline", "due", "finish", "complete", "deliver", "ship",
-                        "launch", "release", "by friday", "by monday", "next week",
-                        "sprint", "milestone", "goal", "target", "project"],
-             "Contains project-related keywords indicating a task with a specific outcome"),
-            (.area, ["weekly", "daily", "monthly", "routine", "maintain",
-                     "ongoing", "review", "health", "fitness", "budget",
-                     "responsibility", "manage", "oversee", "track"],
-             "Contains area-related keywords suggesting an ongoing responsibility"),
-            (.resource, ["article", "book", "tutorial", "reference", "learn",
-                         "interesting", "read", "watch", "course", "tip",
-                         "technique", "how to", "guide", "documentation"],
-             "Contains resource-related keywords indicating reference material"),
-            (.archive, ["completed", "finished", "done", "wrapped up", "closed",
-                        "ended", "concluded", "archived", "old", "past",
-                        "no longer", "discontinued", "cancelled"],
-             "Contains archive-related keywords indicating a completed item"),
+        let rules: [KeywordRule] = [
+            KeywordRule(
+                category: .project,
+                keywords: ["deadline", "due", "finish", "complete", "deliver", "ship",
+                           "launch", "release", "by friday", "by monday", "next week",
+                           "sprint", "milestone", "goal", "target", "project"],
+                reasoning: "Contains project-related keywords indicating a task with a specific outcome"
+            ),
+            KeywordRule(
+                category: .area,
+                keywords: ["weekly", "daily", "monthly", "routine", "maintain",
+                           "ongoing", "review", "health", "fitness", "budget",
+                           "responsibility", "manage", "oversee", "track"],
+                reasoning: "Contains area-related keywords suggesting an ongoing responsibility"
+            ),
+            KeywordRule(
+                category: .resource,
+                keywords: ["article", "book", "tutorial", "reference", "learn",
+                           "interesting", "read", "watch", "course", "tip",
+                           "technique", "how to", "guide", "documentation"],
+                reasoning: "Contains resource-related keywords indicating reference material"
+            ),
+            KeywordRule(
+                category: .archive,
+                keywords: ["completed", "finished", "done", "wrapped up", "closed",
+                           "ended", "concluded", "archived", "old", "past",
+                           "no longer", "discontinued", "cancelled"],
+                reasoning: "Contains archive-related keywords indicating a completed item"
+            ),
         ]
 
-        return keywordMap.map { category, keywords, reasoning in
+        return rules.map { rule in
             CategoryScore(
-                category: category,
-                score: scoreKeywords(keywords, in: text),
-                reasoning: reasoning
+                category: rule.category,
+                score: scoreKeywords(rule.keywords, in: text),
+                reasoning: rule.reasoning
             )
         }
     }
@@ -179,7 +191,13 @@ actor OnDeviceCategorizationService: CategorizationServiceProtocol {
     }
 }
 
-// MARK: - Category Score
+// MARK: - Supporting Types
+
+private struct KeywordRule {
+    let category: PARACategory
+    let keywords: [String]
+    let reasoning: String
+}
 
 private struct CategoryScore {
     let category: PARACategory

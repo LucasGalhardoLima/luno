@@ -65,13 +65,18 @@ swift package resolve
 ```
 Luno/
 ├── App/                    # App entry, DI, navigation
-├── Features/               # Feature modules (Capture, Notes, Folders, NoteDetail)
+├── Features/               # Feature modules
+│   ├── Capture/           # Voice + text note capture
+│   ├── Notes/             # Note browsing
+│   ├── Folders/           # PARA folder browsing
+│   ├── NoteDetail/        # Note detail + re-categorization
+│   └── Settings/          # API key, sync, categorization config
 ├── Core/
 │   ├── Models/            # SwiftData models
-│   ├── Services/          # Business logic
+│   ├── Services/          # Business logic (Speech, Categorization, Logger)
 │   └── Repository/        # Data access layer
-├── Shared/                # Reusable components, theme
-└── Resources/             # Assets, strings
+├── Shared/                # Reusable components, theme, animations
+└── Resources/             # Assets, Info.plist
 ```
 
 ## Running the App
@@ -98,7 +103,7 @@ xcodebuild -scheme Luno -destination 'platform=iOS Simulator,name=iPhone 16 Pro'
 For AI categorization fallback when on-device confidence is low:
 
 1. Get API key from [Anthropic Console](https://console.anthropic.com/)
-2. Store in app Settings (Keychain storage)
+2. Enter in app Settings (gear icon in Notes tab toolbar)
 3. Or set environment variable for development:
    ```bash
    export CLAUDE_API_KEY="sk-ant-..."
@@ -188,8 +193,10 @@ func test_categorize_projectNote_returnsProjectCategory() async throws {
 
 ### Speech Recognition
 ```swift
-// Enable verbose logging
-SpeechService.shared.enableDebugLogging = true
+// Uses LunoLogger (os.Logger) — check Console.app with:
+// subsystem: com.luno.app, category: Speech
+import os
+let log = Logger(subsystem: "com.luno.app", category: "Speech")
 ```
 
 ### Foundation Models

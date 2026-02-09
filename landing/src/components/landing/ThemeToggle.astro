@@ -1,0 +1,20 @@
+---
+import type { LandingCopy } from '@/content/types';
+
+interface Props {
+  copy: LandingCopy;
+}
+
+const { copy } = Astro.props;
+---
+
+<button
+  id="theme-toggle"
+  class="focus-ring theme-toggle"
+  type="button"
+  aria-label={copy.themeToggle.dark}
+  title={copy.themeToggle.dark}
+>
+  <span class="theme-toggle-icon" aria-hidden="true"></span>
+  <span id="theme-toggle-label">{copy.themeToggle.dark}</span>
+</button>
