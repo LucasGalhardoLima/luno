@@ -10,6 +10,7 @@ final class NoteCardViewSnapshotTests: XCTestCase {
 
     /// Fixed date for deterministic snapshots
     private let fixedDate = Date(timeIntervalSince1970: 1_700_000_000) // Nov 14, 2023
+    private let shouldRecord = ProcessInfo.processInfo.environment["SNAPSHOT_TESTING_RECORD"] == "all"
 
     // MARK: - Basic Card
 
@@ -31,7 +32,7 @@ final class NoteCardViewSnapshotTests: XCTestCase {
         let controller = UIHostingController(rootView: view)
         controller.view.frame = CGRect(x: 0, y: 0, width: 375, height: 200)
 
-        assertSnapshot(of: controller, as: .image)
+        assertSnapshot(of: controller, as: .image, record: shouldRecord)
     }
 
     func test_noteCard_textNote() {
@@ -52,7 +53,7 @@ final class NoteCardViewSnapshotTests: XCTestCase {
         let controller = UIHostingController(rootView: view)
         controller.view.frame = CGRect(x: 0, y: 0, width: 375, height: 200)
 
-        assertSnapshot(of: controller, as: .image)
+        assertSnapshot(of: controller, as: .image, record: shouldRecord)
     }
 
     // MARK: - Pinned Note
@@ -75,7 +76,7 @@ final class NoteCardViewSnapshotTests: XCTestCase {
         let controller = UIHostingController(rootView: view)
         controller.view.frame = CGRect(x: 0, y: 0, width: 375, height: 200)
 
-        assertSnapshot(of: controller, as: .image)
+        assertSnapshot(of: controller, as: .image, record: shouldRecord)
     }
 
     // MARK: - All PARA Categories
@@ -97,7 +98,7 @@ final class NoteCardViewSnapshotTests: XCTestCase {
         let controller = UIHostingController(rootView: view)
         controller.view.frame = CGRect(x: 0, y: 0, width: 375, height: 200)
 
-        assertSnapshot(of: controller, as: .image)
+        assertSnapshot(of: controller, as: .image, record: shouldRecord)
     }
 
     func test_noteCard_archiveCategory() {
@@ -117,7 +118,7 @@ final class NoteCardViewSnapshotTests: XCTestCase {
         let controller = UIHostingController(rootView: view)
         controller.view.frame = CGRect(x: 0, y: 0, width: 375, height: 200)
 
-        assertSnapshot(of: controller, as: .image)
+        assertSnapshot(of: controller, as: .image, record: shouldRecord)
     }
 
     func test_noteCard_uncategorized() {
@@ -137,7 +138,7 @@ final class NoteCardViewSnapshotTests: XCTestCase {
         let controller = UIHostingController(rootView: view)
         controller.view.frame = CGRect(x: 0, y: 0, width: 375, height: 200)
 
-        assertSnapshot(of: controller, as: .image)
+        assertSnapshot(of: controller, as: .image, record: shouldRecord)
     }
 
     // MARK: - Long Content
@@ -159,7 +160,7 @@ final class NoteCardViewSnapshotTests: XCTestCase {
         let controller = UIHostingController(rootView: view)
         controller.view.frame = CGRect(x: 0, y: 0, width: 375, height: 200)
 
-        assertSnapshot(of: controller, as: .image)
+        assertSnapshot(of: controller, as: .image, record: shouldRecord)
     }
 
     // MARK: - Dark Mode
@@ -184,6 +185,6 @@ final class NoteCardViewSnapshotTests: XCTestCase {
         controller.overrideUserInterfaceStyle = .dark
         controller.view.frame = CGRect(x: 0, y: 0, width: 375, height: 200)
 
-        assertSnapshot(of: controller, as: .image)
+        assertSnapshot(of: controller, as: .image, record: shouldRecord)
     }
 }

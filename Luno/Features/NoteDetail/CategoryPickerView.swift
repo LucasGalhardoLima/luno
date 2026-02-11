@@ -17,19 +17,46 @@ struct CategoryPickerView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                Section("PARA Categories") {
-                    ForEach(PARACategory.paraCategories, id: \.self) { category in
-                        categoryRow(category)
-                    }
-                }
+            ZStack {
+                LunoBackgroundView()
 
-                Section {
-                    categoryRow(.uncategorized)
+                ScrollView {
+                    VStack(alignment: .leading, spacing: LunoTheme.Spacing.md) {
+                        Text("PARA Categories")
+                            .font(LunoTheme.Typography.caption)
+                            .foregroundStyle(LunoColors.text1)
+                            .textCase(.uppercase)
+                            .tracking(1.2)
+                            .padding(.horizontal, LunoTheme.Spacing.sm)
+
+                        VStack(spacing: LunoTheme.Spacing.xs) {
+                            ForEach(PARACategory.paraCategories, id: \.self) { category in
+                                categoryRow(category)
+                            }
+                        }
+                        .padding(LunoTheme.Spacing.sm)
+                        .lunoGlassSurface(cornerRadius: LunoTheme.CornerRadius.card, fill: LunoColors.surface1)
+
+                        Text("Other")
+                            .font(LunoTheme.Typography.caption)
+                            .foregroundStyle(LunoColors.text1)
+                            .textCase(.uppercase)
+                            .tracking(1.2)
+                            .padding(.horizontal, LunoTheme.Spacing.sm)
+                            .padding(.top, LunoTheme.Spacing.sm)
+
+                        VStack(spacing: LunoTheme.Spacing.xs) {
+                            categoryRow(.uncategorized)
+                        }
+                        .padding(LunoTheme.Spacing.sm)
+                        .lunoGlassSurface(cornerRadius: LunoTheme.CornerRadius.card, fill: LunoColors.surface1)
+                    }
+                    .padding(LunoTheme.Spacing.md)
                 }
             }
             .navigationTitle("Change Category")
             .navigationBarTitleDisplayMode(.inline)
+            .lunoNavChrome()
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
@@ -54,11 +81,11 @@ struct CategoryPickerView: View {
                 VStack(alignment: .leading, spacing: LunoTheme.Spacing.xxxs) {
                     Text(category.displayName)
                         .font(LunoTheme.Typography.body)
-                        .foregroundStyle(LunoColors.textPrimary)
+                        .foregroundStyle(LunoColors.text0)
 
                     Text(category.description)
                         .font(LunoTheme.Typography.caption)
-                        .foregroundStyle(LunoColors.textSecondary)
+                        .foregroundStyle(LunoColors.text1)
                 }
 
                 Spacer()
@@ -66,9 +93,11 @@ struct CategoryPickerView: View {
                 if category == currentCategory {
                     Image(systemName: "checkmark")
                         .font(LunoTheme.Typography.body)
-                        .foregroundStyle(LunoColors.primary)
+                        .foregroundStyle(LunoColors.brand500)
                 }
             }
+            .padding(LunoTheme.Spacing.sm)
+            .lunoGlassSurface(cornerRadius: LunoTheme.CornerRadius.md, fill: LunoColors.surface2)
             .contentShape(Rectangle())
         }
         .accessibilityLabel("\(category.displayName): \(category.description)")

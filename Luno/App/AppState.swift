@@ -8,6 +8,16 @@ import SwiftUI
 
 @Observable
 final class AppState {
+    // MARK: - Onboarding
+
+    /// Whether the user has completed onboarding
+    var onboardingCompleted: Bool = UserDefaults.standard.bool(forKey: "luno.onboarding.completed")
+
+    func completeOnboarding() {
+        onboardingCompleted = true
+        UserDefaults.standard.set(true, forKey: "luno.onboarding.completed")
+    }
+
     // MARK: - Navigation
 
     /// Currently selected tab

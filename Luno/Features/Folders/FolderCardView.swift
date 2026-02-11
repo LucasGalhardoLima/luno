@@ -22,47 +22,55 @@ struct FolderCardView: View {
 
     var body: some View {
         Button(action: action) {
-            VStack(alignment: .leading, spacing: LunoTheme.Spacing.sm) {
-                // Icon and count
-                HStack {
-                    // Category icon
-                    Image(systemName: category.iconName)
-                        .font(LunoTheme.Typography.title2)
-                        .fontWeight(.medium)
-                        .foregroundStyle(categoryColor)
+            HStack(spacing: 0) {
+                // Full-height color accent strip
+                UnevenRoundedRectangle(
+                    topLeadingRadius: LunoTheme.CornerRadius.card,
+                    bottomLeadingRadius: LunoTheme.CornerRadius.card,
+                    bottomTrailingRadius: 0,
+                    topTrailingRadius: 0
+                )
+                .fill(categoryColor)
+                .frame(width: 4)
 
-                    Spacer()
+                VStack(alignment: .leading, spacing: LunoTheme.Spacing.sm) {
+                    // Icon and count
+                    HStack {
+                        // Category icon
+                        Image(systemName: category.iconName)
+                            .font(LunoTheme.Typography.body)
+                            .fontWeight(.medium)
+                            .foregroundStyle(categoryColor)
+                            .frame(width: 36, height: 36)
+                            .background(
+                                Circle().fill(categoryColor.opacity(0.12))
+                            )
 
-                    // Note count badge
-                    Text("\(noteCount)")
-                        .font(LunoTheme.Typography.title3)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(LunoColors.textPrimary)
+                        Spacer()
+
+                        // Note count badge
+                        Text("\(noteCount)")
+                            .font(LunoTheme.Typography.sectionTitle)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(LunoColors.text0)
+                            .contentTransition(.numericText())
+                    }
+
+                    // Category name
+                    Text(category.displayName)
+                        .font(LunoTheme.Typography.headline)
+                        .foregroundStyle(LunoColors.text0)
+
+                    // Description
+                    Text(category.description)
+                        .font(LunoTheme.Typography.caption)
+                        .foregroundStyle(LunoColors.text1)
+                        .lineLimit(2)
                 }
-
-                // Category name
-                Text(category.displayName)
-                    .font(LunoTheme.Typography.headline)
-                    .foregroundStyle(LunoColors.textPrimary)
-
-                // Description
-                Text(category.description)
-                    .font(LunoTheme.Typography.caption)
-                    .foregroundStyle(LunoColors.textSecondary)
-                    .lineLimit(2)
+                .padding(LunoTheme.Spacing.md)
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .padding(LunoTheme.Spacing.md)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(LunoColors.cardBackground)
-            .clipShape(RoundedRectangle(cornerRadius: LunoTheme.CornerRadius.card))
-            .overlay(alignment: .topLeading) {
-                // Color accent bar
-                RoundedRectangle(cornerRadius: 2)
-                    .fill(categoryColor)
-                    .frame(width: 4, height: 32)
-                    .padding(.leading, LunoTheme.Spacing.xs)
-                    .padding(.top, LunoTheme.Spacing.md)
-            }
+            .lunoGlassSurface(cornerRadius: LunoTheme.CornerRadius.card, fill: LunoColors.surface1)
             .cardShadow()
         }
         .scaleButtonStyle()

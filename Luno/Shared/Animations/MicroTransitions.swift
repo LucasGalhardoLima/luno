@@ -9,41 +9,47 @@ enum MicroTransitions {
     // MARK: - Spring Animations
 
     /// Quick, snappy spring for button taps
-    static let buttonPress = Animation.spring(response: 0.3, dampingFraction: 0.6)
+    static let buttonPress = Animation.spring(response: 0.24, dampingFraction: 0.78)
 
     /// Smooth spring for card reveals
-    static let cardReveal = Animation.spring(response: 0.4, dampingFraction: 0.75)
+    static let cardReveal = Animation.spring(response: 0.3, dampingFraction: 0.84)
 
     /// Gentle spring for modal presentations
-    static let modalPresent = Animation.spring(response: 0.5, dampingFraction: 0.8)
+    static let modalPresent = Animation.spring(response: 0.32, dampingFraction: 0.86)
 
     /// Bouncy spring for playful interactions
-    static let bouncy = Animation.spring(response: 0.4, dampingFraction: 0.5)
+    static let bouncy = Animation.spring(response: 0.28, dampingFraction: 0.72)
 
     /// Smooth spring for general UI transitions
-    static let smooth = Animation.spring(response: 0.55, dampingFraction: 0.825)
+    static let smooth = Animation.spring(response: 0.34, dampingFraction: 0.88)
+
+    /// Lunar reveal — entrance animation for screen elements
+    static let lunarReveal = Animation.spring(response: 0.38, dampingFraction: 0.82)
+
+    /// Lunar dismiss — exit animation
+    static let lunarDismiss = Animation.spring(response: 0.28, dampingFraction: 0.90)
 
     // MARK: - Timing Animations
 
     /// Quick ease for instant feedback
-    static let instant = Animation.easeOut(duration: 0.1)
+    static let instant = Animation.easeOut(duration: 0.12)
 
     /// Fast ease for micro-interactions
-    static let fast = Animation.easeInOut(duration: 0.2)
+    static let fast = Animation.easeInOut(duration: 0.18)
 
     /// Normal ease for standard transitions
-    static let normal = Animation.easeInOut(duration: 0.3)
+    static let normal = Animation.easeInOut(duration: 0.24)
 
     /// Slow ease for deliberate animations
-    static let slow = Animation.easeInOut(duration: 0.5)
+    static let slow = Animation.easeInOut(duration: 0.32)
 
     // MARK: - Scale Effects
 
     enum Scale {
         static let pressed: CGFloat = 0.95
-        static let highlighted: CGFloat = 1.02
+        static let highlighted: CGFloat = 1.015
         static let normal: CGFloat = 1.0
-        static let enlarged: CGFloat = 1.1
+        static let enlarged: CGFloat = 1.06
     }
 
     // MARK: - Opacity Effects

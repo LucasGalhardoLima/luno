@@ -6,6 +6,8 @@ import XCTest
 /// Snapshot tests for RecordButton states
 /// TDD: Visual regression testing for the main recording button
 final class RecordButtonSnapshotTests: XCTestCase {
+    private let shouldRecord = ProcessInfo.processInfo.environment["SNAPSHOT_TESTING_RECORD"] == "all"
+
     // MARK: - Idle State
 
     func test_recordButton_idle() {
@@ -16,7 +18,7 @@ final class RecordButtonSnapshotTests: XCTestCase {
         let controller = UIHostingController(rootView: view)
         controller.view.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
 
-        assertSnapshot(of: controller, as: .image(on: .iPhone13))
+        assertSnapshot(of: controller, as: .image(on: .iPhone13), record: shouldRecord)
     }
 
     // MARK: - Recording State
@@ -29,7 +31,7 @@ final class RecordButtonSnapshotTests: XCTestCase {
         let controller = UIHostingController(rootView: view)
         controller.view.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
 
-        assertSnapshot(of: controller, as: .image(on: .iPhone13))
+        assertSnapshot(of: controller, as: .image(on: .iPhone13), record: shouldRecord)
     }
 
     // MARK: - Disabled State
@@ -42,7 +44,7 @@ final class RecordButtonSnapshotTests: XCTestCase {
         let controller = UIHostingController(rootView: view)
         controller.view.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
 
-        assertSnapshot(of: controller, as: .image(on: .iPhone13))
+        assertSnapshot(of: controller, as: .image(on: .iPhone13), record: shouldRecord)
     }
 
     // MARK: - Dark Mode
@@ -57,6 +59,6 @@ final class RecordButtonSnapshotTests: XCTestCase {
         controller.overrideUserInterfaceStyle = .dark
         controller.view.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
 
-        assertSnapshot(of: controller, as: .image(on: .iPhone13))
+        assertSnapshot(of: controller, as: .image(on: .iPhone13), record: shouldRecord)
     }
 }

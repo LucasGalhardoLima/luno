@@ -1,0 +1,48 @@
+---
+import ParaCategoryCard from "./ParaCategoryCard.astro";
+---
+
+<section id="para" class="px-6 py-20 md:py-28">
+  <div class="mx-auto max-w-5xl">
+    <div class="mb-12 text-center reveal">
+      <p class="mb-3 text-sm font-medium uppercase tracking-widest" style="color: var(--color-moon-400);">
+        The Method Behind the Magic
+      </p>
+      <h2 class="mb-4 font-display text-3xl font-bold md:text-4xl" style="color: var(--color-text-0);">
+        Built on PARA
+      </h2>
+      <p class="mx-auto max-w-2xl text-lg leading-relaxed" style="color: var(--color-text-1);">
+        Created by productivity expert <strong style="color: var(--color-text-2);">Tiago Forte</strong>,
+        the PARA method organizes everything in your life into four simple categories.
+        Luno uses AI to categorize your notes automatically — so you never have to think about where to file things.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 reveal-stagger">
+      <ParaCategoryCard
+        name="Projects"
+        description="Active tasks with a deadline. Things you're working on right now that have a clear end point."
+        icon='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>'
+        color="var(--color-para-project)"
+      />
+      <ParaCategoryCard
+        name="Areas"
+        description="Ongoing responsibilities you manage over time. No end date — just standards to maintain."
+        icon='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>'
+        color="var(--color-para-area)"
+      />
+      <ParaCategoryCard
+        name="Resources"
+        description="Reference material for future use. Topics you're interested in or information you might need later."
+        icon='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>'
+        color="var(--color-para-resource)"
+      />
+      <ParaCategoryCard
+        name="Archive"
+        description="Completed or inactive items from the other three categories. Out of sight, but always searchable."
+        icon='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="5" x="2" y="3" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/></svg>'
+        color="var(--color-para-archive)"
+      />
+    </div>
+  </div>
+</section>

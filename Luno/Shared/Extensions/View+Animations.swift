@@ -130,6 +130,15 @@ private struct ScaleInModifier: ViewModifier {
     }
 }
 
+// MARK: - Matched Geometry
+
+extension View {
+    /// Apply matchedGeometryEffect for spatial transitions between views
+    func lunoMatchedGeometry(id: some Hashable, in namespace: Namespace.ID) -> some View {
+        matchedGeometryEffect(id: id, in: namespace)
+    }
+}
+
 // MARK: - Transition Extensions
 
 extension AnyTransition {

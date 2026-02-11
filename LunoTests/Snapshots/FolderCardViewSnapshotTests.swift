@@ -6,6 +6,8 @@ import XCTest
 /// Snapshot tests for FolderCardView
 /// TDD: Visual regression testing for PARA folder cards
 final class FolderCardViewSnapshotTests: XCTestCase {
+    private let shouldRecord = ProcessInfo.processInfo.environment["SNAPSHOT_TESTING_RECORD"] == "all"
+
     // MARK: - Individual Cards
 
     func test_folderCard_project() {
@@ -17,7 +19,7 @@ final class FolderCardViewSnapshotTests: XCTestCase {
         let controller = UIHostingController(rootView: view)
         controller.view.frame = CGRect(x: 0, y: 0, width: 220, height: 180)
 
-        assertSnapshot(of: controller, as: .image)
+        assertSnapshot(of: controller, as: .image, record: shouldRecord)
     }
 
     func test_folderCard_area() {
@@ -29,7 +31,7 @@ final class FolderCardViewSnapshotTests: XCTestCase {
         let controller = UIHostingController(rootView: view)
         controller.view.frame = CGRect(x: 0, y: 0, width: 220, height: 180)
 
-        assertSnapshot(of: controller, as: .image)
+        assertSnapshot(of: controller, as: .image, record: shouldRecord)
     }
 
     func test_folderCard_resource() {
@@ -41,7 +43,7 @@ final class FolderCardViewSnapshotTests: XCTestCase {
         let controller = UIHostingController(rootView: view)
         controller.view.frame = CGRect(x: 0, y: 0, width: 220, height: 180)
 
-        assertSnapshot(of: controller, as: .image)
+        assertSnapshot(of: controller, as: .image, record: shouldRecord)
     }
 
     func test_folderCard_archive() {
@@ -53,7 +55,7 @@ final class FolderCardViewSnapshotTests: XCTestCase {
         let controller = UIHostingController(rootView: view)
         controller.view.frame = CGRect(x: 0, y: 0, width: 220, height: 180)
 
-        assertSnapshot(of: controller, as: .image)
+        assertSnapshot(of: controller, as: .image, record: shouldRecord)
     }
 
     // MARK: - Edge Cases
@@ -67,7 +69,7 @@ final class FolderCardViewSnapshotTests: XCTestCase {
         let controller = UIHostingController(rootView: view)
         controller.view.frame = CGRect(x: 0, y: 0, width: 220, height: 180)
 
-        assertSnapshot(of: controller, as: .image)
+        assertSnapshot(of: controller, as: .image, record: shouldRecord)
     }
 
     func test_folderCard_highCount() {
@@ -79,7 +81,7 @@ final class FolderCardViewSnapshotTests: XCTestCase {
         let controller = UIHostingController(rootView: view)
         controller.view.frame = CGRect(x: 0, y: 0, width: 220, height: 180)
 
-        assertSnapshot(of: controller, as: .image)
+        assertSnapshot(of: controller, as: .image, record: shouldRecord)
     }
 
     // MARK: - Grid Layout
@@ -100,7 +102,7 @@ final class FolderCardViewSnapshotTests: XCTestCase {
         let controller = UIHostingController(rootView: view)
         controller.view.frame = CGRect(x: 0, y: 0, width: 390, height: 350)
 
-        assertSnapshot(of: controller, as: .image)
+        assertSnapshot(of: controller, as: .image, record: shouldRecord)
     }
 
     // MARK: - Dark Mode
@@ -116,6 +118,6 @@ final class FolderCardViewSnapshotTests: XCTestCase {
         controller.overrideUserInterfaceStyle = .dark
         controller.view.frame = CGRect(x: 0, y: 0, width: 220, height: 180)
 
-        assertSnapshot(of: controller, as: .image)
+        assertSnapshot(of: controller, as: .image, record: shouldRecord)
     }
 }

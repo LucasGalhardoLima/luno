@@ -27,6 +27,13 @@ final class SettingsViewModel {
         didSet { UserDefaults.standard.set(confidenceThreshold, forKey: Keys.confidenceThreshold) }
     }
 
+    // MARK: - Appearance
+
+    /// Theme preference: "system", "light", or "dark"
+    var themePreference: String {
+        didSet { UserDefaults.standard.set(themePreference, forKey: Keys.themePreference) }
+    }
+
     // MARK: - Sync Settings
 
     /// Whether iCloud sync is enabled
@@ -68,6 +75,7 @@ final class SettingsViewModel {
         static let claudeModel = "luno.claude.model"
         static let confidenceThreshold = "luno.categorization.confidenceThreshold"
         static let iCloudSync = "luno.sync.iCloud"
+        static let themePreference = "luno.appearance.theme"
     }
 
     // MARK: - Initialization
@@ -76,6 +84,7 @@ final class SettingsViewModel {
         claudeApiKey = Self.loadApiKey()
         claudeModel = UserDefaults.standard.string(forKey: Keys.claudeModel) ?? "claude-sonnet-4-20250514"
         confidenceThreshold = UserDefaults.standard.object(forKey: Keys.confidenceThreshold) as? Double ?? 0.8
+        themePreference = UserDefaults.standard.string(forKey: Keys.themePreference) ?? "system"
         iCloudSyncEnabled = UserDefaults.standard.bool(forKey: Keys.iCloudSync)
         log.debug("Settings loaded")
     }

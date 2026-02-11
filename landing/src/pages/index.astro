@@ -1,71 +1,20 @@
 ---
-import BaseLayout from '@/components/BaseLayout.astro';
-import FoldFinale from '@/components/landing/FoldFinale.astro';
-import FoldHook from '@/components/landing/FoldHook.astro';
-import FoldParaMap from '@/components/landing/FoldParaMap.astro';
-import FoldProofFlow from '@/components/landing/FoldProofFlow.astro';
-import FoldReveal from '@/components/landing/FoldReveal.astro';
-import NarrativeScript from '@/components/landing/NarrativeScript.astro';
-import ThemeToggle from '@/components/landing/ThemeToggle.astro';
-import { siteConfig } from '@/config/site';
-import { copyEn } from '@/content/copy.en';
-import { copyPt } from '@/content/copy.pt';
-
-const locales = {
-  'pt-BR': copyPt,
-  'en-US': copyEn,
-};
-
-const socialPreview = '/images/luno-og.png';
-const phaseLabels = ['Chaos', 'Signal', 'PARA', 'Proof', 'Finale'];
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
+import Hero from "../components/Hero.astro";
+import BentoGrid from "../components/BentoGrid.astro";
+import ParaSection from "../components/ParaSection.astro";
+import WaitlistForm from "../components/WaitlistForm.astro";
+import Footer from "../components/Footer.astro";
 ---
 
-<BaseLayout pageTitle={copyPt.seo.title} pageDescription={copyPt.seo.description} ogImage={socialPreview}>
-  <div class="lunar-stage">
-    <div class="lunar-grain" aria-hidden="true"></div>
-    <div class="lunar-vignette" aria-hidden="true"></div>
-
-    <header class="top-nav">
-      <a href="#hero" class="focus-ring brand-mark">Luno</a>
-      <div class="nav-actions">
-        <ThemeToggle copy={copyPt} />
-        <a
-          href="#waitlist"
-          class="focus-ring cta cta-nav"
-          data-preserve-utm
-          data-track-cta
-          data-i18n="nav.cta"
-        >
-          {copyPt.nav.cta}
-        </a>
-      </div>
-    </header>
-
-    <aside class="phase-rail" aria-hidden="true">
-      <div class="phase-track"><div id="phase-progress" class="phase-progress"></div></div>
-      <div class="phase-items">
-        {phaseLabels.map((label, index) => (
-          <span class="phase-item" data-phase-item data-phase-label={label} data-phase-index={index}></span>
-        ))}
-      </div>
-    </aside>
-
-    <main class="story-wrap">
-      <FoldHook copy={copyPt} />
-      <FoldReveal copy={copyPt} />
-      <FoldParaMap copy={copyPt} />
-      <FoldProofFlow copy={copyPt} />
-      <FoldFinale copy={copyPt} config={siteConfig} />
-    </main>
-
-    <footer class="story-footer">
-      <p>© <span id="current-year"></span> Luno. <span data-i18n="footer.rights">{copyPt.footer.rights}</span></p>
-      <div class="footer-links">
-        <a href="/privacy" class="focus-ring legal-link" data-preserve-utm data-i18n="footer.privacy">{copyPt.footer.privacy}</a>
-        <a href="mailto:hello@luno.app" class="focus-ring legal-link" data-i18n="footer.contact">{copyPt.footer.contact}</a>
-      </div>
-    </footer>
-  </div>
-
-  <NarrativeScript locales={locales} config={siteConfig} />
+<BaseLayout>
+  <ThemeToggle />
+  <main>
+    <Hero />
+    <BentoGrid />
+    <ParaSection />
+    <WaitlistForm />
+  </main>
+  <Footer />
 </BaseLayout>

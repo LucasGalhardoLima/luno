@@ -26,8 +26,7 @@ struct FoldersView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                LunoColors.background
-                    .ignoresSafeArea()
+                LunoBackgroundView()
 
                 ScrollView {
                     VStack(spacing: LunoTheme.Spacing.lg) {
@@ -49,6 +48,7 @@ struct FoldersView: View {
                 }
             }
             .navigationTitle("Folders")
+            .lunoNavChrome()
             .task {
                 await viewModel.fetchCounts()
             }
@@ -76,17 +76,20 @@ struct FoldersView: View {
         HStack {
             VStack(alignment: .leading, spacing: LunoTheme.Spacing.xxs) {
                 Text("\(viewModel.totalNoteCount)")
-                    .font(LunoTheme.Typography.largeTitle)
+                    .font(LunoTheme.Typography.displayMd)
                     .fontWeight(.bold)
-                    .foregroundStyle(LunoColors.textPrimary)
+                    .foregroundStyle(LunoColors.text0)
+                    .contentTransition(.numericText())
 
                 Text("Total Notes")
                     .font(LunoTheme.Typography.subheadline)
-                    .foregroundStyle(LunoColors.textSecondary)
+                    .foregroundStyle(LunoColors.text1)
             }
 
             Spacer()
         }
+        .padding(LunoTheme.Spacing.md)
+        .lunoGlassSurface(cornerRadius: LunoTheme.CornerRadius.card, fill: LunoColors.surface1)
     }
 
     // MARK: - Folder Grid
@@ -122,22 +125,22 @@ struct FoldersView: View {
 
                 Text("Uncategorized")
                     .font(LunoTheme.Typography.headline)
-                    .foregroundStyle(LunoColors.textPrimary)
+                    .foregroundStyle(LunoColors.text0)
 
                 Spacer()
 
                 Text("\(viewModel.noteCount(for: .uncategorized))")
                     .font(LunoTheme.Typography.body)
                     .fontWeight(.medium)
-                    .foregroundStyle(LunoColors.textSecondary)
+                    .foregroundStyle(LunoColors.text1)
+                    .contentTransition(.numericText())
 
                 Image(systemName: "chevron.right")
                     .font(LunoTheme.Typography.caption)
-                    .foregroundStyle(LunoColors.textSecondary)
+                    .foregroundStyle(LunoColors.text1)
             }
             .padding(LunoTheme.Spacing.md)
-            .background(LunoColors.cardBackground)
-            .clipShape(RoundedRectangle(cornerRadius: LunoTheme.CornerRadius.card))
+            .lunoGlassSurface(cornerRadius: LunoTheme.CornerRadius.card, fill: LunoColors.surface1)
             .cardShadow()
         }
         .scaleButtonStyle()
@@ -157,6 +160,7 @@ struct FolderNotesView: View {
     @State private var notes: [Note] = []
     @State private var isLoading = true
     @State private var selectedNote: Note?
+    @State private var errorMessage: String?
 
     private let noteRepository: any NoteRepositoryProtocol
 
@@ -171,19 +175,30 @@ struct FolderNotesView: View {
 
     var body: some View {
         ZStack {
-            LunoColors.background
-                .ignoresSafeArea()
+            LunoBackgroundView()
 
             if isLoading {
                 ProgressView()
-                    .tint(LunoColors.primary)
+                    .tint(LunoColors.brand500)
             } else if notes.isEmpty {
                 emptyState
             } else {
                 notesList
             }
         }
+        .overlay(alignment: .bottom) {
+            if let errorMessage {
+                Text(errorMessage)
+                    .font(LunoTheme.Typography.footnote)
+                    .foregroundStyle(LunoColors.State.error)
+                    .padding(LunoTheme.Spacing.sm)
+                    .lunoGlassSurface(cornerRadius: LunoTheme.CornerRadius.sm, fill: LunoColors.surface2)
+                    .padding(.bottom, LunoTheme.Spacing.md)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
+        }
         .navigationTitle(category.displayName)
+        .lunoNavChrome()
         .task {
             await loadNotes()
         }
@@ -273,7 +288,8 @@ struct FolderNotesView: View {
             try await noteRepository.updateCategory(noteId: note.id, category: newCategory)
             notes.removeAll { $0.id == note.id }
         } catch {
-            // Failed to move
+            LunoLogger.repository.error("Failed to move note \(note.id) to \(newCategory.rawValue): \(error)")
+            errorMessage = "Could not move note"
         }
     }
 
@@ -282,7 +298,8 @@ struct FolderNotesView: View {
             try await noteRepository.delete(note)
             notes.removeAll { $0.id == note.id }
         } catch {
-            // Error handling
+            LunoLogger.repository.error("Failed to delete note \(note.id): \(error)")
+            errorMessage = "Could not delete note"
         }
     }
 
@@ -290,21 +307,28 @@ struct FolderNotesView: View {
 
     private var emptyState: some View {
         VStack(spacing: LunoTheme.Spacing.md) {
-            Image(systemName: category.iconName)
-                .font(LunoTheme.Typography.largeTitle)
-                .foregroundStyle(LunoColors.PARA.color(for: category.rawValue).opacity(0.5))
-                .imageScale(.large)
-                .accessibilityHidden(true)
+            ZStack {
+                Circle()
+                    .fill(LunoColors.PARA.color(for: category.rawValue).opacity(0.12))
+                    .frame(width: 64, height: 64)
+
+                Image(systemName: category.iconName)
+                    .font(LunoTheme.Typography.title)
+                    .foregroundStyle(LunoColors.PARA.color(for: category.rawValue))
+            }
+            .accessibilityHidden(true)
 
             Text("No \(category.displayName)")
-                .font(LunoTheme.Typography.title3)
-                .foregroundStyle(LunoColors.textPrimary)
+                .font(LunoTheme.Typography.sectionTitle)
+                .foregroundStyle(LunoColors.text0)
 
             Text("Notes categorized as \(category.displayName.lowercased()) will appear here")
                 .font(LunoTheme.Typography.body)
-                .foregroundStyle(LunoColors.textSecondary)
+                .foregroundStyle(LunoColors.text1)
                 .multilineTextAlignment(.center)
         }
+        .padding(LunoTheme.Spacing.lg)
+        .lunoGlassSurface(cornerRadius: LunoTheme.CornerRadius.card, fill: LunoColors.surface1)
         .padding(.horizontal, LunoTheme.Spacing.xl)
     }
 
@@ -312,10 +336,19 @@ struct FolderNotesView: View {
 
     private func loadNotes() async {
         isLoading = true
+        errorMessage = nil
         do {
             notes = try await noteRepository.fetchNotes(category: category)
         } catch {
-            // Error handling
+            LunoLogger.repository.error("Failed to fetch notes for \(category.rawValue): \(error)")
+            // Fallback: fetch all and filter client-side
+            do {
+                let allNotes = try await noteRepository.fetchNotes(category: nil)
+                notes = allNotes.filter { $0.category == category }
+            } catch {
+                LunoLogger.repository.error("Fallback fetch also failed: \(error)")
+                errorMessage = "Could not load notes"
+            }
         }
         isLoading = false
     }

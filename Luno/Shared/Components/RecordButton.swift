@@ -14,13 +14,12 @@ struct RecordButton: View {
     let isDisabled: Bool
     let action: () -> Void
 
-    @State private var pulseScale: CGFloat = 1.0
-    @State private var glowOpacity: Double = 0.0
+    @State private var isPulsing = false
 
     // MARK: - Constants
 
-    private let buttonSize: CGFloat = 72
-    private let innerCircleSize: CGFloat = 56
+    private let buttonSize: CGFloat = 84
+    private let innerCircleSize: CGFloat = 68
     private let recordingSquareSize: CGFloat = 24
 
     // MARK: - Initialization
@@ -40,44 +39,47 @@ struct RecordButton: View {
     var body: some View {
         Button(action: action) {
             ZStack {
-                // Glow effect when recording
+                // Ambient glow
                 if isRecording {
-                    Circle()
-                        .fill(LunoColors.Recording.glow)
-                        .frame(width: buttonSize * 1.5, height: buttonSize * 1.5)
-                        .scaleEffect(pulseScale)
-                        .opacity(glowOpacity)
+                    recordingGlow
+                } else {
+                    idleGlow
                 }
 
                 // Outer ring
                 Circle()
-                    .stroke(
-                        isRecording
-                            ? LunoColors.Recording.active
-                            : LunoColors.primary,
-                        lineWidth: 4
-                    )
+                    .fill(LunoColors.brand600.opacity(0.10))
+                    .overlay {
+                        Circle()
+                            .strokeBorder(
+                                isRecording
+                                    ? LunoColors.Recording.active.opacity(0.9)
+                                    : LunoColors.brand500.opacity(0.85),
+                                lineWidth: 3
+                            )
+                    }
+                    .overlay {
+                        Circle()
+                            .strokeBorder(LunoColors.lineSoft, lineWidth: 1)
+                            .padding(1)
+                    }
                     .frame(width: buttonSize, height: buttonSize)
+                    .shadow(color: LunoColors.glowSoft.opacity(0.35), radius: 12, x: 0, y: 6)
 
                 // Inner circle / Recording indicator
                 if isRecording {
-                    // Recording: show rounded square
                     RoundedRectangle(cornerRadius: 6)
                         .fill(LunoColors.Recording.active)
                         .frame(width: recordingSquareSize, height: recordingSquareSize)
                 } else {
-                    // Idle: show filled circle
                     Circle()
-                        .fill(
-                            LinearGradient(
-                                colors: [LunoColors.lunaBlue600, LunoColors.lunaBlue500],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
+                        .fill(LunoColors.heroGradient)
                         .frame(width: innerCircleSize, height: innerCircleSize)
+                        .overlay {
+                            Circle()
+                                .strokeBorder(LunoColors.text2.opacity(0.26), lineWidth: 1)
+                        }
 
-                    // Mic icon
                     Image(systemName: "mic.fill")
                         .font(LunoTheme.Typography.title2)
                         .fontWeight(.medium)
@@ -91,38 +93,39 @@ struct RecordButton: View {
         .accessibilityLabel(isRecording ? "Stop recording" : "Start recording")
         .accessibilityHint(isRecording ? "Double tap to stop" : "Double tap to start voice recording")
         .onChange(of: isRecording) { _, newValue in
-            if newValue {
-                startPulseAnimation()
-            } else {
-                stopPulseAnimation()
+            isPulsing = newValue
+        }
+    }
+
+    // MARK: - Idle Glow
+
+    private var idleGlow: some View {
+        Circle()
+            .fill(LunoColors.glowSoft)
+            .frame(width: 96, height: 96)
+            .blur(radius: 16)
+            .opacity(0.2)
+    }
+
+    // MARK: - Recording Glow
+
+    @ViewBuilder
+    private var recordingGlow: some View {
+        if reduceMotion {
+            Circle()
+                .fill(LunoColors.Recording.glow)
+                .frame(width: buttonSize * 1.5, height: buttonSize * 1.5)
+                .opacity(0.35)
+        } else {
+            PhaseAnimator([false, true], trigger: isPulsing) { phase in
+                Circle()
+                    .fill(LunoColors.Recording.glow)
+                    .frame(width: buttonSize * 1.5, height: buttonSize * 1.5)
+                    .scaleEffect(phase ? 1.12 : 1.0)
+                    .opacity(phase ? 0.45 : 0.25)
+            } animation: { _ in
+                .easeInOut(duration: 1.0)
             }
-        }
-    }
-
-    // MARK: - Animations
-
-    private func startPulseAnimation() {
-        guard !reduceMotion else {
-            glowOpacity = 0.5
-            return
-        }
-
-        withAnimation(.easeIn(duration: 0.2)) {
-            glowOpacity = 0.5
-        }
-
-        withAnimation(
-            .easeInOut(duration: 1.2)
-                .repeatForever(autoreverses: true)
-        ) {
-            pulseScale = 1.15
-        }
-    }
-
-    private func stopPulseAnimation() {
-        withAnimation(.easeOut(duration: 0.2)) {
-            pulseScale = 1.0
-            glowOpacity = 0.0
         }
     }
 }

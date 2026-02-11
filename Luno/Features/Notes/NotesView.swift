@@ -27,12 +27,11 @@ struct NotesView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                LunoColors.background
-                    .ignoresSafeArea()
+                LunoBackgroundView()
 
                 if viewModel.isLoading, viewModel.notes.isEmpty {
                     ProgressView()
-                        .tint(LunoColors.primary)
+                        .tint(LunoColors.brand500)
                 } else if viewModel.notes.isEmpty {
                     emptyStateView
                 } else {
@@ -40,6 +39,7 @@ struct NotesView: View {
                 }
             }
             .navigationTitle("Notes")
+            .lunoNavChrome()
             .searchable(text: $viewModel.searchText, prompt: "Search notes")
             .onChange(of: viewModel.searchText) { _, newValue in
                 viewModel.search(query: newValue)
@@ -53,7 +53,8 @@ struct NotesView: View {
                             showSettings = true
                         } label: {
                             Image(systemName: "gearshape")
-                                .foregroundStyle(LunoColors.primary)
+                                .foregroundStyle(LunoColors.brand500)
+                                .font(.system(size: 16, weight: .semibold))
                         }
                         .accessibilityLabel("Settings")
                     }
@@ -113,21 +114,29 @@ struct NotesView: View {
 
     private var emptyStateView: some View {
         VStack(spacing: LunoTheme.Spacing.md) {
-            Image(systemName: "note.text")
-                .font(LunoTheme.Typography.largeTitle)
-                .foregroundStyle(LunoColors.textSecondary.opacity(0.5))
-                .imageScale(.large)
-                .accessibilityHidden(true)
+            ZStack {
+                Circle()
+                    .fill(LunoColors.heroGradient.opacity(0.12))
+                    .frame(width: 64, height: 64)
+
+                Image(systemName: "note.text")
+                    .font(LunoTheme.Typography.title)
+                    .foregroundStyle(LunoColors.heroGradient)
+            }
+            .accessibilityHidden(true)
 
             Text("No Notes Yet")
-                .font(LunoTheme.Typography.title2)
-                .foregroundStyle(LunoColors.textPrimary)
+                .font(LunoTheme.Typography.sectionTitle)
+                .foregroundStyle(LunoColors.text0)
 
             Text("Capture your first note using the\nCapture tab")
                 .font(LunoTheme.Typography.body)
-                .foregroundStyle(LunoColors.textSecondary)
+                .foregroundStyle(LunoColors.text1)
                 .multilineTextAlignment(.center)
         }
+        .padding(LunoTheme.Spacing.xl)
+        .lunoGlassSurface(cornerRadius: LunoTheme.CornerRadius.card, fill: LunoColors.surface1)
+        .padding(.horizontal, LunoTheme.Spacing.md)
     }
 
     // MARK: - Category Filter
@@ -164,7 +173,8 @@ struct NotesView: View {
             }
         } label: {
             Image(systemName: viewModel.selectedCategory != nil ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
-                .foregroundStyle(LunoColors.primary)
+                .foregroundStyle(LunoColors.brand500)
+                .font(.system(size: 16, weight: .semibold))
         }
         .accessibilityLabel(
             viewModel.selectedCategory.map { "Filter: \($0.displayName)" }

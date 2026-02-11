@@ -6,6 +6,8 @@ import XCTest
 /// Snapshot tests for CategoryPickerView
 /// TDD: Visual regression testing for category selection UI
 final class CategoryPickerSnapshotTests: XCTestCase {
+    private let shouldRecord = ProcessInfo.processInfo.environment["SNAPSHOT_TESTING_RECORD"] == "all"
+
     // MARK: - Default State
 
     func test_categoryPicker_projectSelected() {
@@ -14,7 +16,7 @@ final class CategoryPickerSnapshotTests: XCTestCase {
         let controller = UIHostingController(rootView: view)
         controller.view.frame = CGRect(x: 0, y: 0, width: 390, height: 500)
 
-        assertSnapshot(of: controller, as: .image)
+        assertSnapshot(of: controller, as: .image, record: shouldRecord)
     }
 
     func test_categoryPicker_areaSelected() {
@@ -23,7 +25,7 @@ final class CategoryPickerSnapshotTests: XCTestCase {
         let controller = UIHostingController(rootView: view)
         controller.view.frame = CGRect(x: 0, y: 0, width: 390, height: 500)
 
-        assertSnapshot(of: controller, as: .image)
+        assertSnapshot(of: controller, as: .image, record: shouldRecord)
     }
 
     func test_categoryPicker_resourceSelected() {
@@ -32,7 +34,7 @@ final class CategoryPickerSnapshotTests: XCTestCase {
         let controller = UIHostingController(rootView: view)
         controller.view.frame = CGRect(x: 0, y: 0, width: 390, height: 500)
 
-        assertSnapshot(of: controller, as: .image)
+        assertSnapshot(of: controller, as: .image, record: shouldRecord)
     }
 
     func test_categoryPicker_archiveSelected() {
@@ -41,7 +43,7 @@ final class CategoryPickerSnapshotTests: XCTestCase {
         let controller = UIHostingController(rootView: view)
         controller.view.frame = CGRect(x: 0, y: 0, width: 390, height: 500)
 
-        assertSnapshot(of: controller, as: .image)
+        assertSnapshot(of: controller, as: .image, record: shouldRecord)
     }
 
     func test_categoryPicker_uncategorized() {
@@ -50,7 +52,7 @@ final class CategoryPickerSnapshotTests: XCTestCase {
         let controller = UIHostingController(rootView: view)
         controller.view.frame = CGRect(x: 0, y: 0, width: 390, height: 500)
 
-        assertSnapshot(of: controller, as: .image)
+        assertSnapshot(of: controller, as: .image, record: shouldRecord)
     }
 
     // MARK: - Dark Mode
@@ -63,6 +65,6 @@ final class CategoryPickerSnapshotTests: XCTestCase {
         controller.overrideUserInterfaceStyle = .dark
         controller.view.frame = CGRect(x: 0, y: 0, width: 390, height: 500)
 
-        assertSnapshot(of: controller, as: .image)
+        assertSnapshot(of: controller, as: .image, record: shouldRecord)
     }
 }

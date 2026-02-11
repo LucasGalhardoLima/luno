@@ -27,9 +27,7 @@ struct CaptureView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                // Background
-                LunoColors.background
-                    .ignoresSafeArea()
+                LunoBackgroundView()
 
                 VStack(spacing: 0) {
                     // Input mode toggle
@@ -51,6 +49,7 @@ struct CaptureView: View {
             }
             .navigationTitle("Capture")
             .navigationBarTitleDisplayMode(.inline)
+            .lunoNavChrome()
             .task {
                 await viewModel.checkAuthorization()
             }
@@ -89,7 +88,7 @@ struct CaptureView: View {
     // MARK: - Input Mode Toggle
 
     private var inputModeToggle: some View {
-        HStack(spacing: LunoTheme.Spacing.xs) {
+        HStack(spacing: LunoTheme.Spacing.xxs) {
             ForEach(InputMode.allCases, id: \.self) { mode in
                 Button {
                     withAnimation(MicroTransitions.fast) {
@@ -110,13 +109,13 @@ struct CaptureView: View {
                     .padding(.vertical, LunoTheme.Spacing.xs)
                     .background(
                         viewModel.inputMode == mode
-                            ? LunoColors.primary.opacity(0.15)
+                            ? LunoColors.brand500
                             : Color.clear
                     )
                     .foregroundStyle(
                         viewModel.inputMode == mode
-                            ? LunoColors.primary
-                            : LunoColors.textSecondary
+                            ? .white
+                            : LunoColors.text1
                     )
                     .clipShape(Capsule())
                 }
@@ -168,15 +167,14 @@ struct CaptureView: View {
             TextEditor(text: $viewModel.transcription)
                 .focused($isTextEditorFocused)
                 .font(LunoTheme.Typography.body)
-                .foregroundStyle(LunoColors.textPrimary)
+                .foregroundStyle(LunoColors.text0)
                 .scrollContentBackground(.hidden)
-                .background(LunoColors.cardBackground)
-                .clipShape(RoundedRectangle(cornerRadius: LunoTheme.CornerRadius.md))
+                .lunoGlassSurface(cornerRadius: LunoTheme.CornerRadius.md, fill: LunoColors.surface1)
                 .overlay {
                     if viewModel.transcription.isEmpty {
                         Text("Start typing your note...")
                             .font(LunoTheme.Typography.body)
-                            .foregroundStyle(LunoColors.textSecondary)
+                            .foregroundStyle(LunoColors.text1)
                             .allowsHitTesting(false)
                             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                             .padding(LunoTheme.Spacing.sm)
@@ -191,14 +189,26 @@ struct CaptureView: View {
 
     private var emptyStateView: some View {
         VStack(spacing: LunoTheme.Spacing.md) {
-            Image(systemName: "mic.fill")
-                .font(LunoTheme.Typography.largeTitle)
-                .foregroundStyle(LunoColors.textSecondary.opacity(0.5))
-                .accessibilityHidden(true)
+            Button {
+                Task { await viewModel.startRecording() }
+            } label: {
+                VStack(spacing: LunoTheme.Spacing.md) {
+                    ZStack {
+                        Circle()
+                            .fill(LunoColors.heroGradient.opacity(0.12))
+                            .frame(width: 80, height: 80)
 
-            Text("Tap to start recording")
-                .font(LunoTheme.Typography.body)
-                .foregroundStyle(LunoColors.textSecondary)
+                        Image(systemName: "mic.fill")
+                            .font(LunoTheme.Typography.displayMd)
+                            .foregroundStyle(LunoColors.heroGradient)
+                    }
+
+                    Text("Tap to record")
+                        .font(LunoTheme.Typography.headline)
+                        .foregroundStyle(LunoColors.text0)
+                }
+            }
+            .disabled(!viewModel.isAuthorized)
 
             if !viewModel.isAuthorized {
                 Button("Enable Microphone") {
@@ -207,9 +217,11 @@ struct CaptureView: View {
                     }
                 }
                 .font(LunoTheme.Typography.callout)
-                .foregroundStyle(LunoColors.primary)
+                .foregroundStyle(LunoColors.brand500)
             }
         }
+        .padding(.vertical, LunoTheme.Spacing.xl)
+        .padding(.horizontal, LunoTheme.Spacing.md)
         .frame(maxWidth: .infinity)
     }
 
@@ -217,12 +229,11 @@ struct CaptureView: View {
         ScrollView {
             Text(viewModel.transcription)
                 .font(LunoTheme.Typography.title3)
-                .foregroundStyle(LunoColors.textPrimary)
+                .foregroundStyle(LunoColors.text0)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(LunoTheme.Spacing.md)
         }
-        .background(LunoColors.cardBackground)
-        .clipShape(RoundedRectangle(cornerRadius: LunoTheme.CornerRadius.md))
+        .lunoGlassSurface(cornerRadius: LunoTheme.CornerRadius.md, fill: LunoColors.surface1)
         .cardShadow()
     }
 
@@ -242,42 +253,33 @@ struct CaptureView: View {
         }
     }
 
+    @ViewBuilder
     private var idleControls: some View {
-        VStack(spacing: LunoTheme.Spacing.md) {
-            if viewModel.inputMode == .voice {
-                RecordButton(
-                    isRecording: false,
-                    isDisabled: !viewModel.isAuthorized
-                ) {
-                    Task {
-                        await viewModel.startRecording()
-                    }
+        if viewModel.inputMode == .text {
+            // Save button for text mode
+            Button {
+                isTextEditorFocused = false
+                Task {
+                    await viewModel.saveNote()
                 }
-            } else {
-                // Save button for text mode
-                Button {
-                    isTextEditorFocused = false
-                    Task {
-                        await viewModel.saveNote()
-                    }
-                } label: {
-                    Text("Save Note")
-                        .font(LunoTheme.Typography.headline)
-                        .foregroundStyle(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, LunoTheme.Spacing.md)
-                        .background(LunoColors.primary)
-                        .clipShape(RoundedRectangle(cornerRadius: LunoTheme.CornerRadius.button))
-                }
-                .disabled(viewModel.transcription.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-                .opacity(
-                    viewModel.transcription.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                        ? MicroTransitions.Opacity.disabled
-                        : MicroTransitions.Opacity.normal
-                )
-                .accessibilityLabel("Save note")
-                .accessibilityHint("Double tap to save the typed note")
+            } label: {
+                Text("Save Note")
+                    .font(LunoTheme.Typography.headline)
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, LunoTheme.Spacing.md)
+                    .background(LunoColors.voiceButtonGradient)
+                    .clipShape(RoundedRectangle(cornerRadius: LunoTheme.CornerRadius.button))
+                    .lunoGlassStroke(cornerRadius: LunoTheme.CornerRadius.button)
             }
+            .disabled(viewModel.transcription.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+            .opacity(
+                viewModel.transcription.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                    ? MicroTransitions.Opacity.disabled
+                    : MicroTransitions.Opacity.normal
+            )
+            .accessibilityLabel("Save note")
+            .accessibilityHint("Double tap to save the typed note")
         }
     }
 
@@ -306,8 +308,9 @@ struct CaptureView: View {
                     .foregroundStyle(LunoColors.State.error)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, LunoTheme.Spacing.md)
-                    .background(LunoColors.State.error.opacity(0.1))
+                    .background(LunoColors.State.error.opacity(0.12))
                     .clipShape(RoundedRectangle(cornerRadius: LunoTheme.CornerRadius.button))
+                    .lunoGlassStroke(cornerRadius: LunoTheme.CornerRadius.button)
             }
             .accessibilityLabel("Discard note")
             .accessibilityHint("Double tap to discard the recorded note")
@@ -323,8 +326,9 @@ struct CaptureView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, LunoTheme.Spacing.md)
-                    .background(LunoColors.primary)
+                    .background(LunoColors.voiceButtonGradient)
                     .clipShape(RoundedRectangle(cornerRadius: LunoTheme.CornerRadius.button))
+                    .lunoGlassStroke(cornerRadius: LunoTheme.CornerRadius.button)
             }
             .accessibilityLabel("Save note")
             .accessibilityHint("Double tap to save the recorded note")
@@ -338,7 +342,7 @@ struct CaptureView: View {
 
             Text("Saving...")
                 .font(LunoTheme.Typography.body)
-                .foregroundStyle(LunoColors.textSecondary)
+                .foregroundStyle(LunoColors.text1)
         }
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Saving note")

@@ -25,6 +25,8 @@ struct LunoApp: App {
     // MARK: - Initialization
 
     init() {
+        LunoTheme.configureFontAppearance()
+
         do {
             let schema = Schema([
                 Note.self,
@@ -80,6 +82,15 @@ struct LunoApp: App {
             ContentView(noteRepository: noteRepository, categorizationService: categorizationService)
                 .environment(appState)
                 .modelContainer(modelContainer)
+                .preferredColorScheme(colorScheme)
+        }
+    }
+
+    private var colorScheme: ColorScheme? {
+        switch UserDefaults.standard.string(forKey: "luno.appearance.theme") {
+        case "light": .light
+        case "dark": .dark
+        default: nil
         }
     }
 }

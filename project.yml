@@ -70,6 +70,8 @@ targets:
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
         UILaunchScreen: {}
+        UIAppFonts:
+          - Syne-Variable.ttf
         UIBackgroundModes:
           - audio
         UISupportedInterfaceOrientations:

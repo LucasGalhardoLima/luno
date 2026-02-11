@@ -1,157 +1,39 @@
 ---
-import BaseLayout from '@/components/BaseLayout.astro';
-import { copyEn } from '@/content/copy.en';
-import { copyPt } from '@/content/copy.pt';
-
-const locales = {
-  'pt-BR': copyPt,
-  'en-US': copyEn,
-};
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
+import Footer from "../components/Footer.astro";
 ---
 
-<BaseLayout pageTitle={copyPt.privacyPage.title} pageDescription={copyPt.privacyPage.intro}>
-  <main class="privacy-wrap">
-    <header class="privacy-header">
-      <a href="/" class="focus-ring legal-link" data-i18n="privacyPage.back">
-        {copyPt.privacyPage.back}
-      </a>
-    </header>
+<BaseLayout title="Privacy Policy — Luno" description="Luno's privacy policy. Your notes stay on your device.">
+  <ThemeToggle />
+  <main class="px-6 py-20 md:py-28">
+    <article class="prose mx-auto max-w-3xl" style="color: var(--color-text-0);">
+      <h1 class="font-display text-4xl font-bold" style="color: var(--color-text-0);">Privacy Policy</h1>
+      <p class="text-lg" style="color: var(--color-text-1);">Last updated: February 2026</p>
 
-    <article class="privacy-card">
-      <h1 class="scene-title" data-i18n="privacyPage.title">{copyPt.privacyPage.title}</h1>
-      <p class="privacy-updated" data-i18n="privacyPage.updatedAt">{copyPt.privacyPage.updatedAt}</p>
-      <p class="scene-body" data-i18n="privacyPage.intro">{copyPt.privacyPage.intro}</p>
+      <h2 class="font-display text-2xl font-semibold" style="color: var(--color-text-0);">Your Data Stays Yours</h2>
+      <p style="color: var(--color-text-1);">
+        Luno is designed with privacy at its core. Your notes are stored on your device and are never
+        sent to external servers for processing. On-device AI handles categorization locally.
+      </p>
 
-      <section class="privacy-sections">
-        <div>
-          <h2 data-i18n="privacyPage.items.0.title">{copyPt.privacyPage.items[0].title}</h2>
-          <p data-i18n="privacyPage.items.0.body">{copyPt.privacyPage.items[0].body}</p>
-        </div>
-        <div>
-          <h2 data-i18n="privacyPage.items.1.title">{copyPt.privacyPage.items[1].title}</h2>
-          <p data-i18n="privacyPage.items.1.body">{copyPt.privacyPage.items[1].body}</p>
-        </div>
-        <div>
-          <h2 data-i18n="privacyPage.items.2.title">{copyPt.privacyPage.items[2].title}</h2>
-          <p data-i18n="privacyPage.items.2.body">{copyPt.privacyPage.items[2].body}</p>
-        </div>
-        <div>
-          <h2 data-i18n="privacyPage.items.3.title">{copyPt.privacyPage.items[3].title}</h2>
-          <p data-i18n="privacyPage.items.3.body">{copyPt.privacyPage.items[3].body}</p>
-        </div>
-      </section>
+      <h2 class="font-display text-2xl font-semibold" style="color: var(--color-text-0);">What We Collect</h2>
+      <p style="color: var(--color-text-1);">
+        If you join the waitlist, we collect only your email address via Formspree. We do not track
+        your usage, collect analytics, or store any personal data beyond what you voluntarily provide.
+      </p>
+
+      <h2 class="font-display text-2xl font-semibold" style="color: var(--color-text-0);">iCloud Sync</h2>
+      <p style="color: var(--color-text-1);">
+        If you enable iCloud sync, your notes are synced through Apple's CloudKit infrastructure,
+        encrypted in transit and at rest. Luno does not have access to your iCloud data.
+      </p>
+
+      <h2 class="font-display text-2xl font-semibold" style="color: var(--color-text-0);">Contact</h2>
+      <p style="color: var(--color-text-1);">
+        Questions about privacy? Reach out via our GitHub repository.
+      </p>
     </article>
   </main>
-
-  <script is:inline id="copy-data" type="application/json" set:html={JSON.stringify(locales)}></script>
-  <script>
-    type Locale = 'pt-BR' | 'en-US';
-    interface CopyClient {
-      privacyPage: {
-        title: string;
-        updatedAt: string;
-        intro: string;
-      };
-      [key: string]: unknown;
-    }
-
-    type UtmKey =
-      | 'utm_source'
-      | 'utm_medium'
-      | 'utm_campaign'
-      | 'utm_term'
-      | 'utm_content'
-      | 'gclid'
-      | 'fbclid';
-    type UtmMap = Partial<Record<UtmKey, string>>;
-
-    function parseJsonScript<T>(id: string): T {
-      const node = document.getElementById(id);
-      if (!(node instanceof HTMLScriptElement) || !node.textContent) {
-        throw new Error(`Missing JSON script: ${id}`);
-      }
-      return JSON.parse(node.textContent) as T;
-    }
-
-    function inferLocale(language: string | undefined, fallback: Locale): Locale {
-      if (!language) return fallback;
-      const normalized = language.toLowerCase();
-      if (normalized.startsWith('pt')) return 'pt-BR';
-      if (normalized.startsWith('en')) return 'en-US';
-      return fallback;
-    }
-
-    function readUtmParams(search: URLSearchParams): UtmMap {
-      const keys: UtmKey[] = [
-        'utm_source',
-        'utm_medium',
-        'utm_campaign',
-        'utm_term',
-        'utm_content',
-        'gclid',
-        'fbclid',
-      ];
-      return keys.reduce<UtmMap>((acc, key) => {
-        const value = search.get(key);
-        if (value) acc[key] = value;
-        return acc;
-      }, {});
-    }
-
-    function appendUtmToUrl(href: string, utm: UtmMap): string {
-      try {
-        const url = new URL(href, window.location.origin);
-        Object.entries(utm).forEach(([key, value]) => {
-          if (value && !url.searchParams.has(key)) {
-            url.searchParams.set(key, value);
-          }
-        });
-        return `${url.pathname}${url.search}${url.hash}`;
-      } catch {
-        return href;
-      }
-    }
-
-    function getValueByPath(object: unknown, path: string): string | undefined {
-      const result = path.split('.').reduce<unknown>((acc, part) => {
-        if (acc === null || acc === undefined) return undefined;
-        if (Array.isArray(acc) && !Number.isNaN(Number(part))) {
-          return acc[Number(part)];
-        }
-        if (typeof acc === 'object') {
-          return (acc as Record<string, unknown>)[part];
-        }
-        return undefined;
-      }, object);
-      return typeof result === 'string' ? result : undefined;
-    }
-
-    const copyData = parseJsonScript<Record<Locale, CopyClient>>('copy-data');
-    const locale = inferLocale(navigator.language, 'pt-BR');
-    const copy = copyData[locale] || copyData['pt-BR'];
-
-    document.documentElement.lang = locale;
-
-    document.querySelectorAll<HTMLElement>('[data-i18n]').forEach((node) => {
-      const key = node.dataset.i18n;
-      if (!key) return;
-      const value = getValueByPath(copy, key);
-      if (value) node.textContent = value;
-    });
-
-    document.title = copy.privacyPage.title;
-    document.getElementById('meta-description')?.setAttribute('content', copy.privacyPage.intro);
-    document.getElementById('meta-og-title')?.setAttribute('content', copy.privacyPage.title);
-    document.getElementById('meta-og-description')?.setAttribute('content', copy.privacyPage.intro);
-    document.getElementById('meta-twitter-title')?.setAttribute('content', copy.privacyPage.title);
-    document
-      .getElementById('meta-twitter-description')
-      ?.setAttribute('content', copy.privacyPage.intro);
-
-    const utm = readUtmParams(new URLSearchParams(window.location.search));
-    const backLink = document.querySelector<HTMLAnchorElement>('a[href="/"]');
-    if (backLink) {
-      backLink.setAttribute('href', appendUtmToUrl('/', utm));
-    }
-  </script>
+  <Footer />
 </BaseLayout>

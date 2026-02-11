@@ -1,0 +1,66 @@
+---
+
+---
+
+<section id="waitlist" class="px-6 py-20 md:py-28">
+  <div class="mx-auto max-w-xl text-center reveal">
+    <p class="mb-3 text-sm font-medium uppercase tracking-widest" style="color: var(--color-moon-400);">
+      Coming Soon
+    </p>
+    <h2 class="mb-4 font-display text-3xl font-bold md:text-4xl" style="color: var(--color-text-0);">
+      Be the first to try Luno
+    </h2>
+    <p class="mb-8 text-lg" style="color: var(--color-text-1);">
+      Join the waitlist and we'll let you know when Luno is ready for you.
+    </p>
+
+    <form
+      id="waitlist-form"
+      action="https://formspree.io/f/PLACEHOLDER"
+      method="POST"
+      class="relative mx-auto flex max-w-md flex-col gap-3 sm:flex-row"
+    >
+      <!-- Honeypot -->
+      <input type="text" name="website" class="sr-only" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+      <!-- Hidden UTM fields -->
+      <input type="hidden" name="utm_source" id="utm_source" />
+      <input type="hidden" name="utm_medium" id="utm_medium" />
+      <input type="hidden" name="utm_campaign" id="utm_campaign" />
+      <input type="hidden" name="locale" id="form_locale" />
+
+      <label for="email" class="sr-only">Email address</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        required
+        placeholder="your@email.com"
+        class="flex-1 rounded-full border px-6 py-4 text-base outline-none transition-colors focus:ring-2"
+        style={`
+          background: var(--color-surface-2);
+          border-color: var(--color-line-soft);
+          color: var(--color-text-0);
+          --tw-ring-color: var(--color-brand-500);
+        `}
+      />
+      <button
+        type="submit"
+        class="btn-primary whitespace-nowrap rounded-full px-8 py-4 text-base font-semibold text-white"
+        style="background: linear-gradient(135deg, var(--color-brand-600), var(--color-moon-400));"
+      >
+        Join Waitlist
+      </button>
+    </form>
+
+    <!-- Feedback messages -->
+    <div id="form-success" class="mt-4 hidden text-base font-medium" style="color: var(--color-state-success);">
+      Thanks! You're on the list. We'll be in touch.
+    </div>
+    <div id="form-error" class="mt-4 hidden text-base font-medium" style="color: var(--color-state-error);">
+      Something went wrong. Please try again.
+    </div>
+  </div>
+</section>
+
+<script src="../scripts/form-handler.ts"></script>

@@ -1,0 +1,54 @@
+---
+import BentoCard from "./BentoCard.astro";
+---
+
+<section id="features" class="px-6 py-20 md:py-28">
+  <div class="mx-auto max-w-6xl">
+    <div class="mb-12 text-center reveal">
+      <h2 class="mb-4 font-display text-3xl font-bold md:text-4xl" style="color: var(--color-text-0);">
+        Everything you need, nothing you don't
+      </h2>
+      <p class="mx-auto max-w-2xl text-lg" style="color: var(--color-text-1);">
+        Luno keeps it simple — capture fast, organize automatically, find anything instantly.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5 reveal-stagger">
+      <BentoCard
+        title="Voice-First Capture"
+        description="Just tap and talk. Luno transcribes your voice in real time, so your ideas flow from thought to text without typing a word."
+        icon='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>'
+        size="large"
+        accentColor="var(--color-brand-500)"
+      />
+      <BentoCard
+        title="100% Private"
+        description="Your notes never leave your phone. On-device AI means zero cloud processing, zero data collection."
+        icon='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>'
+        size="standard"
+        accentColor="var(--color-moon-400)"
+      />
+      <BentoCard
+        title="Works Anywhere"
+        description="Full offline capability. Capture and organize notes with or without an internet connection."
+        icon='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" x2="12" y1="2" y2="12"/></svg>'
+        size="standard"
+        accentColor="var(--color-para-project)"
+      />
+      <BentoCard
+        title="AI Categorization"
+        description="Luno's AI reads your note and instantly files it into the right PARA category — Projects, Areas, Resources, or Archive. No manual sorting needed."
+        icon='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" x2="12" y1="22.08" y2="12"/></svg>'
+        size="wide"
+        accentColor="var(--color-para-area)"
+      />
+      <BentoCard
+        title="PARA Native"
+        description="Built around Tiago Forte's proven PARA method from the ground up — not bolted on as an afterthought."
+        icon='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>'
+        size="standard"
+        accentColor="var(--color-para-resource)"
+      />
+    </div>
+  </div>
+</section>

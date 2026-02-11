@@ -26,8 +26,7 @@ struct NoteDetailView: View {
 
     var body: some View {
         ZStack {
-            LunoColors.background
-                .ignoresSafeArea()
+            LunoBackgroundView()
 
             ScrollView {
                 VStack(alignment: .leading, spacing: LunoTheme.Spacing.lg) {
@@ -48,6 +47,7 @@ struct NoteDetailView: View {
         }
         .navigationTitle("Note")
         .navigationBarTitleDisplayMode(.inline)
+        .lunoNavChrome()
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 toolbarMenu
@@ -94,12 +94,12 @@ struct NoteDetailView: View {
                 Text(viewModel.note.sourceType == .voice ? "Voice" : "Text")
                     .font(LunoTheme.Typography.caption)
             }
-            .foregroundStyle(LunoColors.textSecondary)
+            .foregroundStyle(LunoColors.text1)
 
             // Date
             Text(viewModel.note.createdAt.smartFormatted)
                 .font(LunoTheme.Typography.caption)
-                .foregroundStyle(LunoColors.textSecondary)
+                .foregroundStyle(LunoColors.text1)
 
             Spacer()
 
@@ -107,10 +107,13 @@ struct NoteDetailView: View {
             if viewModel.note.isPinned {
                 Image(systemName: "pin.fill")
                     .font(LunoTheme.Typography.caption)
-                    .foregroundStyle(LunoColors.primary)
+                    .foregroundStyle(LunoColors.brand500)
                     .accessibilityLabel("Pinned")
             }
         }
+        .padding(.horizontal, LunoTheme.Spacing.sm)
+        .padding(.vertical, LunoTheme.Spacing.xs)
+        .lunoGlassSurface(cornerRadius: LunoTheme.CornerRadius.md, fill: LunoColors.surface1)
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Created via \(viewModel.note.sourceType == .voice ? "voice" : "text"), \(viewModel.note.createdAt.smartFormatted)\(viewModel.note.isPinned ? ", Pinned" : "")")
     }
@@ -126,7 +129,7 @@ struct NoteDetailView: View {
 
                 Image(systemName: "chevron.right")
                     .font(LunoTheme.Typography.caption2)
-                    .foregroundStyle(LunoColors.textSecondary)
+                    .foregroundStyle(LunoColors.text1)
                     .accessibilityHidden(true)
 
                 Spacer()
@@ -134,12 +137,11 @@ struct NoteDetailView: View {
                 if viewModel.note.categoryConfidence > 0 {
                     Text("AI \(Int(viewModel.note.categoryConfidence * 100))%")
                         .font(LunoTheme.Typography.caption2)
-                        .foregroundStyle(LunoColors.textSecondary)
+                        .foregroundStyle(LunoColors.text1)
                 }
             }
             .padding(LunoTheme.Spacing.sm)
-            .background(LunoColors.cardBackground)
-            .clipShape(RoundedRectangle(cornerRadius: LunoTheme.CornerRadius.sm))
+            .lunoGlassSurface(cornerRadius: LunoTheme.CornerRadius.md, fill: LunoColors.surface1)
         }
         .accessibilityLabel("Category: \(viewModel.note.category.displayName)\(viewModel.note.categoryConfidence > 0 ? ", AI confidence \(Int(viewModel.note.categoryConfidence * 100)) percent" : ""). Tap to change.")
     }
@@ -159,11 +161,10 @@ struct NoteDetailView: View {
     private var readOnlyContent: some View {
         Text(viewModel.note.content)
             .font(LunoTheme.Typography.body)
-            .foregroundStyle(LunoColors.textPrimary)
+            .foregroundStyle(LunoColors.text0)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(LunoTheme.Spacing.md)
-            .background(LunoColors.cardBackground)
-            .clipShape(RoundedRectangle(cornerRadius: LunoTheme.CornerRadius.card))
+            .lunoGlassSurface(cornerRadius: LunoTheme.CornerRadius.card, fill: LunoColors.surface1)
             .cardShadow()
     }
 
@@ -171,22 +172,21 @@ struct NoteDetailView: View {
         VStack(spacing: LunoTheme.Spacing.sm) {
             TextEditor(text: $viewModel.editedContent)
                 .font(LunoTheme.Typography.body)
-                .foregroundStyle(LunoColors.textPrimary)
+                .foregroundStyle(LunoColors.text0)
                 .scrollContentBackground(.hidden)
                 .frame(minHeight: 200)
                 .padding(LunoTheme.Spacing.sm)
-                .background(LunoColors.cardBackground)
-                .clipShape(RoundedRectangle(cornerRadius: LunoTheme.CornerRadius.card))
+                .lunoGlassSurface(cornerRadius: LunoTheme.CornerRadius.card, fill: LunoColors.surface1)
                 .overlay {
                     RoundedRectangle(cornerRadius: LunoTheme.CornerRadius.card)
-                        .strokeBorder(LunoColors.primary, lineWidth: 2)
+                        .strokeBorder(LunoColors.brand500, lineWidth: 1.5)
                 }
 
             HStack(spacing: LunoTheme.Spacing.md) {
                 Button("Cancel") {
                     viewModel.cancelEditing()
                 }
-                .foregroundStyle(LunoColors.textSecondary)
+                .foregroundStyle(LunoColors.text1)
 
                 Spacer()
 
@@ -194,7 +194,7 @@ struct NoteDetailView: View {
                     Task { await viewModel.saveEdits() }
                 }
                 .fontWeight(.semibold)
-                .foregroundStyle(LunoColors.primary)
+                .foregroundStyle(LunoColors.brand500)
             }
         }
     }
@@ -240,7 +240,7 @@ struct NoteDetailView: View {
             }
         } label: {
             Image(systemName: "ellipsis.circle")
-                .foregroundStyle(LunoColors.primary)
+                .foregroundStyle(LunoColors.brand500)
         }
         .accessibilityLabel("Note actions")
         .accessibilityHint("Double tap to show edit, pin, and delete options")

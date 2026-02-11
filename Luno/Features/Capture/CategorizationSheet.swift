@@ -67,16 +67,17 @@ struct CategorizationSheet: View {
                     .slideUpOnAppear(delay: 0.2)
             }
             .padding(LunoTheme.Spacing.md)
-            .background(LunoColors.background)
+            .background(LunoBackgroundView())
             .navigationTitle("Categorize Note")
             .navigationBarTitleDisplayMode(.inline)
+            .lunoNavChrome()
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Skip") {
                         onSkip()
                         dismiss()
                     }
-                    .foregroundStyle(LunoColors.textSecondary)
+                    .foregroundStyle(LunoColors.text1)
                 }
             }
         }
@@ -96,22 +97,21 @@ struct CategorizationSheet: View {
             HStack {
                 Image(systemName: note.sourceType == .voice ? "mic.fill" : "text.alignleft")
                     .font(LunoTheme.Typography.caption)
-                    .foregroundStyle(LunoColors.textSecondary)
+                    .foregroundStyle(LunoColors.text1)
 
                 Text("Note Preview")
                     .font(LunoTheme.Typography.caption)
-                    .foregroundStyle(LunoColors.textSecondary)
+                    .foregroundStyle(LunoColors.text1)
             }
 
             Text(note.content)
                 .font(LunoTheme.Typography.body)
-                .foregroundStyle(LunoColors.textPrimary)
+                .foregroundStyle(LunoColors.text0)
                 .lineLimit(3)
         }
         .padding(LunoTheme.Spacing.md)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(LunoColors.cardBackground)
-        .clipShape(RoundedRectangle(cornerRadius: LunoTheme.CornerRadius.card))
+        .lunoGlassSurface(cornerRadius: LunoTheme.CornerRadius.card, fill: LunoColors.surface1)
         .subtleShadow()
     }
 
@@ -120,11 +120,11 @@ struct CategorizationSheet: View {
     private var loadingView: some View {
         VStack(spacing: LunoTheme.Spacing.md) {
             ProgressView()
-                .tint(LunoColors.primary)
+                .tint(LunoColors.brand500)
 
             Text("Analyzing note...")
                 .font(LunoTheme.Typography.body)
-                .foregroundStyle(LunoColors.textSecondary)
+                .foregroundStyle(LunoColors.text1)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, LunoTheme.Spacing.xl)
@@ -138,11 +138,11 @@ struct CategorizationSheet: View {
             HStack(spacing: LunoTheme.Spacing.xs) {
                 Image(systemName: result.source == .onDevice ? "cpu" : "cloud")
                     .font(LunoTheme.Typography.caption)
-                    .foregroundStyle(LunoColors.primary)
+                    .foregroundStyle(LunoColors.brand500)
 
                 Text(result.source == .onDevice ? "On-device AI" : "Cloud AI")
                     .font(LunoTheme.Typography.caption)
-                    .foregroundStyle(LunoColors.textSecondary)
+                    .foregroundStyle(LunoColors.text1)
 
                 Spacer()
 
@@ -153,12 +153,11 @@ struct CategorizationSheet: View {
             // Reasoning
             Text(result.result.reasoning)
                 .font(LunoTheme.Typography.callout)
-                .foregroundStyle(LunoColors.textPrimary)
+                .foregroundStyle(LunoColors.text0)
                 .italic()
         }
         .padding(LunoTheme.Spacing.md)
-        .background(LunoColors.primary.opacity(0.05))
-        .clipShape(RoundedRectangle(cornerRadius: LunoTheme.CornerRadius.md))
+        .lunoGlassSurface(cornerRadius: LunoTheme.CornerRadius.md, fill: LunoColors.brand500.opacity(0.08))
     }
 
     // MARK: - Confidence Indicator
@@ -199,7 +198,7 @@ struct CategorizationSheet: View {
         VStack(alignment: .leading, spacing: LunoTheme.Spacing.sm) {
             Text("Category")
                 .font(LunoTheme.Typography.headline)
-                .foregroundStyle(LunoColors.textPrimary)
+                .foregroundStyle(LunoColors.text0)
 
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: LunoTheme.Spacing.sm) {
                 ForEach(PARACategory.paraCategories, id: \.self) { category in
@@ -228,12 +227,12 @@ struct CategorizationSheet: View {
             .background(
                 selectedCategory == category
                     ? LunoColors.PARA.color(for: category.rawValue).opacity(0.15)
-                    : LunoColors.cardBackground
+                    : LunoColors.surface2
             )
             .foregroundStyle(
                 selectedCategory == category
                     ? LunoColors.PARA.color(for: category.rawValue)
-                    : LunoColors.textSecondary
+                    : LunoColors.text1
             )
             .clipShape(RoundedRectangle(cornerRadius: LunoTheme.CornerRadius.button))
             .overlay {
@@ -241,8 +240,8 @@ struct CategorizationSheet: View {
                     .strokeBorder(
                         selectedCategory == category
                             ? LunoColors.PARA.color(for: category.rawValue)
-                            : LunoColors.textSecondary.opacity(0.2),
-                        lineWidth: selectedCategory == category ? 2 : 1
+                            : LunoColors.lineSoft,
+                        lineWidth: selectedCategory == category ? 1.5 : 1
                     )
             }
         }
@@ -265,8 +264,9 @@ struct CategorizationSheet: View {
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, LunoTheme.Spacing.md)
-                .background(LunoColors.primary)
+                .background(LunoColors.voiceButtonGradient)
                 .clipShape(RoundedRectangle(cornerRadius: LunoTheme.CornerRadius.button))
+                .lunoGlassStroke(cornerRadius: LunoTheme.CornerRadius.button)
         }
         .scaleButtonStyle()
     }

@@ -10,17 +10,20 @@ struct FloatingCard<Content: View>: View {
 
     let content: Content
     let isSelected: Bool
+    let accentColor: Color?
     let onTap: (() -> Void)?
 
     // MARK: - Initialization
 
     init(
         isSelected: Bool = false,
+        accentColor: Color? = nil,
         onTap: (() -> Void)? = nil,
         @ViewBuilder content: () -> Content
     ) {
         self.content = content()
         self.isSelected = isSelected
+        self.accentColor = accentColor
         self.onTap = onTap
     }
 
@@ -34,19 +37,31 @@ struct FloatingCard<Content: View>: View {
     }
 
     private var cardContent: some View {
-        content
-            .padding(LunoTheme.Spacing.md)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(LunoColors.cardBackground)
-            .clipShape(RoundedRectangle(cornerRadius: LunoTheme.CornerRadius.card))
-            .overlay {
-                RoundedRectangle(cornerRadius: LunoTheme.CornerRadius.card)
-                    .strokeBorder(
-                        isSelected ? LunoColors.primary : .clear,
-                        lineWidth: isSelected ? 2 : 0
-                    )
+        HStack(spacing: 0) {
+            if let accentColor {
+                UnevenRoundedRectangle(
+                    topLeadingRadius: LunoTheme.CornerRadius.card,
+                    bottomLeadingRadius: LunoTheme.CornerRadius.card,
+                    bottomTrailingRadius: 0,
+                    topTrailingRadius: 0
+                )
+                .fill(accentColor)
+                .frame(width: 3)
             }
-            .cardShadow()
+
+            content
+                .padding(LunoTheme.Spacing.md)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .lunoGlassSurface(cornerRadius: LunoTheme.CornerRadius.card, fill: LunoColors.surface1)
+        .overlay {
+            RoundedRectangle(cornerRadius: LunoTheme.CornerRadius.card, style: .continuous)
+                .strokeBorder(
+                    isSelected ? LunoColors.brand500 : LunoColors.lineSoft,
+                    lineWidth: isSelected ? 1.5 : 1
+                )
+        }
+        .cardShadow()
     }
 }
 
@@ -75,20 +90,24 @@ struct NoteCard: View {
     // MARK: - Body
 
     var body: some View {
-        FloatingCard(isSelected: isSelected, onTap: onTap) {
+        FloatingCard(
+            isSelected: isSelected,
+            accentColor: LunoColors.PARA.color(for: note.category.rawValue),
+            onTap: onTap
+        ) {
             VStack(alignment: .leading, spacing: LunoTheme.Spacing.sm) {
                 // Header with source type and pin indicator
                 HStack {
                     Image(systemName: note.sourceType == .voice ? "mic.fill" : "text.alignleft")
                         .font(LunoTheme.Typography.caption)
-                        .foregroundStyle(LunoColors.textSecondary)
+                        .foregroundStyle(LunoColors.text1)
 
                     Spacer()
 
                     if note.isPinned {
                         Image(systemName: "pin.fill")
                             .font(LunoTheme.Typography.caption)
-                            .foregroundStyle(LunoColors.primary)
+                            .foregroundStyle(LunoColors.brand500)
                     }
 
                     CategoryBadge(category: note.category)
@@ -97,13 +116,13 @@ struct NoteCard: View {
                 // Content preview
                 Text(note.content)
                     .font(LunoTheme.Typography.body)
-                    .foregroundStyle(LunoColors.textPrimary)
+                    .foregroundStyle(LunoColors.text0)
                     .lineLimit(3)
 
                 // Footer with date
                 Text(note.modifiedAt.formatted(date: .abbreviated, time: .shortened))
                     .font(LunoTheme.Typography.caption)
-                    .foregroundStyle(LunoColors.textSecondary)
+                    .foregroundStyle(LunoColors.text1)
             }
         }
         .accessibilityElement(children: .combine)

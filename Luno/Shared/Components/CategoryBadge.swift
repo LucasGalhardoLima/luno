@@ -51,7 +51,7 @@ struct CategoryBadge: View {
 
             Text(category.displayName)
                 .font(LunoTheme.Typography.caption)
-                .foregroundStyle(LunoColors.textSecondary)
+                .foregroundStyle(LunoColors.text1)
         }
     }
 
@@ -64,12 +64,18 @@ struct CategoryBadge: View {
             Text(category.displayName)
                 .font(LunoTheme.Typography.footnote)
                 .fontWeight(.medium)
-                .foregroundStyle(LunoColors.textPrimary)
+                .foregroundStyle(LunoColors.text0)
         }
         .padding(.horizontal, LunoTheme.Spacing.sm)
         .padding(.vertical, LunoTheme.Spacing.xxs)
-        .background(categoryColor.opacity(0.15))
-        .clipShape(RoundedRectangle(cornerRadius: LunoTheme.CornerRadius.sm))
+        .background(
+            Capsule(style: .continuous)
+                .fill(categoryColor.opacity(0.14))
+                .overlay(
+                    Capsule(style: .continuous)
+                        .strokeBorder(categoryColor.opacity(0.26), lineWidth: 1)
+                )
+        )
     }
 
     private var pillBadge: some View {
